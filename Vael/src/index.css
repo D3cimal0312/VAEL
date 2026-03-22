@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@theme {
+  --color-lux: #b5713a;
+  --color-lux-light: #d4905a;
+  --color-cream: #f5f0e8;
+  --color-hair: #99938b;
+--color-hair-dark:rgb(45, 42, 42);
+  --color-cream-light: #faf6f0;
+
+   --color-ink: #0d0d0d;
+
+  --font-fair: "Playfair Display", serif;
+ --font-sans: "DM Sans", sans-serif;  
+  --font-cormorant: "Cormorant Garamond", serif;
+  
+}
+
+* { cursor: none; }
+
+#animated-cursor-inner,
+#animated-cursor-outer {
+  z-index: 9999 !important;
+
+  
+  color:  rgb(45, 44, 42);
+}
+
+
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes counter { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+    .orbit { animation:spin 50s linear infinite; }
+    .counter-img { animation:counter 50s linear infinite; }
+  
