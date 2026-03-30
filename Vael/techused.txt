@@ -1,0 +1,6 @@
+1. setup using react and vite under js+swc
+2. tailwind css
+3.lucide react for icons
+4.npm i react-animated-cursor --legacy-peer-deps
+5.npm i aos
+6.npm install embla-carousel-react --save
