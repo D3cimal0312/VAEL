@@ -44,7 +44,7 @@ const orderSummary = [
                 <img src={cart.images[0]} alt={cart.name} className="w-32 h-42" />
                 <div id="purchase_info" className="text-lg">
                   <p className="uppercase text-lux ">{cart.category}</p>
-                  <p className="text-2xl">{cart.name}</p>
+                  <p className="text-2xl">{cart.name} {cart.category}</p>
 
                   <p className="text-hair"><span>Sand</span>.<span>Size M</span></p>
                        <Quantity
