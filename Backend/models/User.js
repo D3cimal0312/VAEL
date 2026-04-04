@@ -14,18 +14,18 @@ const userSchema=new mongoose.Schema(
     {
         firstName:{type:String,required:true},
         lastName:{type:String,required:true},
-        email:{type:stringify,required:true,unique:true},
+        email:{type:String,required:true,unique:true},
         passwordHash:{type:String,required:true,select:false},
         role:{type:String,enum:["customer","admin"],default:"customer"},
         
         address:{
         home:{type:addressSchema,default:null},
         work:{type:addressSchema,default:null},
-
+        },
         // yo chai hamro sql ko similar xa like using foregin key yesma aaba fav ma chai product ko id store hunxa from products db and tei object id linxa which we can later get  by using .populate
     favourites:   [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
-    },
+    
     
 }
 )

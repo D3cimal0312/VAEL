@@ -1,27 +1,33 @@
 import { useState, useEffect } from "react";
 
 import "./App.css";
-import Navbar from "./common/Navbar";
-import Land from "./pages/Land";
-import AnimatedCursor from "react-animated-cursor";
 
+import AnimatedCursor from "react-animated-cursor";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Routes, Route,useLocation } from "react-router-dom";
 
+
+import Navbar from "./common/Navbar";
 import Footer from "./common/Footer";
 
-import { Routes, Route } from "react-router-dom";
+import Land from "./pages/Land";
 
 import DetailCatPage from "./pages/DetailCatPage";
 import About from "./pages/About";
 import DetailedProduct from "./pages/DetailedProduct";
 import Cart from "./pages/Cart"
 import Profile from "./pages/Profile";
-
 import Register from "./pages/Register";
 
+
+
+
 function App() {
-  const [count, setCount] = useState(0);
+
+  const location=useLocation();
+
+  const hideNavbarRoutes=['/auth/register']
 
   useEffect(() => {
     AOS.init({
@@ -32,6 +38,11 @@ function App() {
     AOS.refreshHard()
 
   }, []);
+
+
+console.log(location.pathname,"pathname");
+
+
 
   return (
      <div className="min-h-screen flex flex-col"> 
@@ -72,13 +83,13 @@ function App() {
         }}
       />
 
-      <Navbar />
+      {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
 
       <main className="flex-1">   
         <Routes>
           <Route path="/" element={<Land />} />
           <Route path="/category/:category" element={<DetailCatPage />} />
-          <Route path="/product/:id" element={<DetailedProduct />} />
+          <Route path="/product/:slug" element={<DetailedProduct />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
@@ -88,7 +99,7 @@ function App() {
         </Routes>
       </main>
 
-      <Footer />
+{!hideNavbarRoutes.includes(location.pathname) && <Footer />}
     </div>
   );
 }

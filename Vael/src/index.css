@@ -19,17 +19,3 @@
 
 * { cursor: none; }
 
-#animated-cursor-inner,
-#animated-cursor-outer {
-  z-index: 9999 !important;
-
-  
-  color:  rgb(45, 44, 42);
-}
-
-
-    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    @keyframes counter { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
-    .orbit { animation:spin 50s linear infinite; }
-    .counter-img { animation:counter 50s linear infinite; }
-  

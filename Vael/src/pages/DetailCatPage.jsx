@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import {FilterProducts} from  "../hooks/FilterProducts.js"
+import { useProducts } from '../hooks/GetProducts.js'
 import Card from '../common/Card.jsx'
 import Heading from '../common/Heading.jsx'
 import Backgroundtag from '../components/Backgroundtag.jsx'
@@ -15,8 +15,16 @@ const DetailCatPage = () => {
 
     const {category}=useParams();
     const {title1,title2,subtitle,filter,count,description}=config[category];
-    
-    const products =FilterProducts(filter);
+
+    console.log(filter)
+
+    // !here stands the biggest brainache i faced  a "{filter}" 
+      //  const { products, loading, error } = useProducts({filter});
+
+      const { products, loading, error } = useProducts(filter);
+
+  if (loading) return <p>Loading...</p>;
+  if (error)   return <p>Error: {error}</p>;
 
     return (
 

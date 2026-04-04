@@ -1,10 +1,17 @@
 import Heading from '../common/Heading'
 import "aos/dist/aos.css";
-import products from '../data/Productsdata.js';
+import { useProducts } from '../hooks/GetProducts';
 
 import Card from '../common/Card';
 const BestSellers = () => {
-  const producstsRatedHigh=products.filter((item)=>item.rating>4.6);
+    const { products, loading, error } = useProducts({
+    sort:  'rating',
+    order: 'desc',
+    limit: 5,
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error)   return <p>Error: {error}</p>;
   return (
     <div className='p-14 bg-cream-light overflow-x-hidden'>
         <div className='flex justify-between '>
@@ -15,7 +22,7 @@ const BestSellers = () => {
         <div className='w-full flex justify-between'>
     
 
-    <Card products={producstsRatedHigh} limit={5} />
+    <Card products={products} limit={5} />
            
 
 
