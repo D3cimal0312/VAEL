@@ -10,6 +10,8 @@ import Tags from "../common/Tags.jsx";
 import Quantity from "../common/Quantity.jsx";
 import { useProduct } from "../hooks/GetProducts.js";
 import { useProducts } from "../hooks/GetProducts.js";
+import { ProductCardSkeleton,ProductDetailSkeleton } from "@/components/ui/Skeletons.jsx";
+
 const DetailedProduct = () => {
   const { slug } = useParams();
 
@@ -36,8 +38,13 @@ const DetailedProduct = () => {
     }
   }, [slug, product]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error)   return <p>Error: {error}</p>;
+
+  if (loading) return <div>
+    <ProductDetailSkeleton/>
+    <ProductCardSkeleton/>
+  </div>;
+
+
   if (!product) return <p>Product not found</p>; 
 
 

@@ -3,6 +3,7 @@ import { useProducts } from '../hooks/GetProducts.js'
 import Card from '../common/Card.jsx'
 import Heading from '../common/Heading.jsx'
 import Backgroundtag from '../components/Backgroundtag.jsx'
+import { Banner, ProductCardSkeleton } from '@/components/ui/Skeletons.jsx'
 
 const DetailCatPage = () => {
     const config = {
@@ -23,8 +24,7 @@ const DetailCatPage = () => {
 
       const { products, loading, error } = useProducts(filter);
 
-  if (loading) return <p>Loading...</p>;
-  if (error)   return <p>Error: {error}</p>;
+  if (loading) return <div> <Banner/> <ProductCardSkeleton/> </div>;
 
     return (
 

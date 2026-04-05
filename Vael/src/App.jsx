@@ -23,6 +23,7 @@ import Register from "./pages/Register";
 
 
 
+
 function App() {
 
   const location=useLocation();
@@ -94,6 +95,8 @@ console.log(location.pathname,"pathname");
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/auth/register" element={<Register />} />
+
+
 
 
         </Routes>

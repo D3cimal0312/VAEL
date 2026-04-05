@@ -67,13 +67,13 @@ const gridMap = {
 
           <Tags items={item.tags}/>
 
-              <div className='font-cormorant font-semibold text-xl'>
+              <div className='font-fair font-semibold text-xl'>
                 {item.originalPrice
                   ? <div className='flex gap-4 items-center'>
-                      <p className='text-hair line-through text-lg'>${item.originalPrice}</p>
-                      <p>${item.price}</p>
+                      <p className='text-hair line-through text-xl'>${item.originalPrice}</p>
+                      <p className='text-3xl text-lux'>${item.price}</p>
                     </div>
-                  : <p>${item.price}</p>
+                  : <p className='text-3xl text-lux'>${item.price}</p>
                 }
               </div>
               <div className='flex gap-1.5 mt-1'>
