@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@import "tailwindcss";
+
+
+@theme {
+  --color-lux: #b5713a;
+  --color-lux-light: #d4905a;
+  --color-cream: #f5f0e8;
+  --color-hair: #99938b;
+--color-hair-dark:rgb(45, 42, 42);
+  --color-cream-light: #faf6f0;
+
+   --color-ink: #0d0d0d;
+
+  --font-fair: "Playfair Display", serif;
+ --font-sans: "DM Sans", sans-serif;  
+  --font-cormorant: "Cormorant Garamond", serif;
+  
+}
+
+@utility font-fair {
+  font-family: var(--font-fair);
+}
+
+@utility font-sans {
+  font-family: var(--font-sans);
+}
+
+@utility font-cormorant {
+  font-family: var(--font-cormorant);
+}
+
+
+.mantine-Checkbox-icon ,.mantine-ComboboxChevron-chevron{
+  display: none !important ;
+}
+
+
+* { cursor: none; }

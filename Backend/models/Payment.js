@@ -15,7 +15,13 @@ const paymentSchema = new Schema(
                   type:    String,
       enum:    ["pending", "succeeded", "failed"],
       default: "pending",
-        }
+        },
+
+method: {
+  type: String,
+  enum: ["khalti", "esewa"],
+  required: true,
+},
 
     },
      { timestamps: true }

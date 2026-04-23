@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema(
+const   OrderSchema = new mongoose.Schema(
   {
     orderNumber: { type: String, required: true, unique: true },
     userId: {
@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "delivered"],
+      enum: ["pending", "confirmed","shipped","delivered"],
       default: "pending",
     },
     items: [
@@ -18,9 +18,9 @@ const orderSchema = new mongoose.Schema(
         productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
         name: { type: String, required: true },
         price: { type: Number, required: true },
-        size: String,
-        colorName: String,
-        quantity: { type: Number, default: 1 },
+ size:      { type: String },
+        colorName: { type: String },
+        quantity: { type: Number, default: 1 ,min: [1, "Quantity must be at least 1"]},
       },
     ],
 
@@ -31,8 +31,17 @@ const orderSchema = new mongoose.Schema(
       discountAmount: { type: Number, default: 0 },
       total: { type: Number, required: true },
     },
+      shippingAddress: {
+      houseNum:     { type: String },
+      localAddress: { type: String },
+      district:     { type: String },
+      province:     { type: String },
+      zipcode:      { type: String },
+      country:      { type: String },
+      phone:        { type: String },
+    },
   },
   { timestamps: true },
 );
 
-module.exports = mongoose.model("Order", OrderSchema);
+export default mongoose.model("Order", OrderSchema);
