@@ -81,6 +81,9 @@ const DetailCatPage = () => {
   useEffect(() => {
     if (!loading) {
       isFirstLoad.current = false;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (isFirstLoad.current) {
       setPage(1);
     }
   }, [loading]);
