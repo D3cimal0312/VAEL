@@ -14,13 +14,13 @@ const BestSellers = () => {
   if (loading) <ProductCardSkeleton limit={5} />;
 
   return (
-    <div className="p-14 bg-cream-light overflow-x-hidden">
+    <div className="p-14 bg-cream-light overflow-x-hidden ">
       <div className="flex justify-between ">
         <Heading subheading={"curated For you"} mainheading={"Bestsellers"} />
       </div>
 
-      <div className="w-full flex justify-between">
-        <Card products={products} limit={5} />
+      <div className="w-full flex justify-between ">
+        <Card products={products} />
       </div>
     </div>
   );

@@ -1,6 +1,3 @@
-
-
-
 export function Banner() {
   return (
     <div className="relative overflow-hidden h-[30vh] flex items-center mb-4">
@@ -18,8 +15,8 @@ export function Banner() {
 
 export function ProductCardSkeleton({ limit = 10, cols = 5 }) {
   const gridMap = {
-    3: 'grid-cols-[repeat(auto-fill,minmax(255px,1fr))]',
-    5: 'grid-cols-[repeat(auto-fill,minmax(300px,1fr))]',
+    3: "grid-cols-[repeat(auto-fill,minmax(255px,1fr))]",
+    5: "grid-cols-[repeat(auto-fill,minmax(300px,1fr))]",
   };
 
   return (
@@ -138,28 +135,27 @@ export function ProductDetailSkeleton() {
   );
 }
 
+export function DashboardSkeleton() {
+  return (
+    <div className="p-8 flex flex-col gap-6">
+      <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-32 bg-stone-300 animate-pulse rounded-2xl"
+          />
+        ))}
+      </div>
 
+      <div className="grid grid-cols-5 gap-4">
+        <div className="col-span-4 h-72 bg-stone-300 animate-pulse rounded-2xl" />
+        <div className="col-span-1 h-72 bg-stone-300 animate-pulse rounded-2xl" />
+      </div>
 
-
-export function DashboardSkeleton  () {
-
-return ( 
-  <div className="p-8 flex flex-col gap-6">
-    <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="h-32 bg-stone-300 animate-pulse rounded-2xl" />
-      ))}
+      <div className="flex gap-6">
+        <div className="flex-1 h-94 bg-stone-300 animate-pulse rounded-2xl" />
+        <div className="flex-1 h-94 bg-stone-300 animate-pulse rounded-2xl" />
+      </div>
     </div>
- 
-    <div className="grid grid-cols-5 gap-4">
-      <div className="col-span-4 h-64 bg-stone-300 animate-pulse rounded-2xl" />
-      <div className="col-span-1 h-64 bg-stone-300 animate-pulse rounded-2xl" />
-    </div>
- 
-    <div className="flex gap-6">
-      <div className="flex-1 h-72 bg-stone-300 animate-pulse rounded-2xl" />
-      <div className="flex-1 h-72 bg-stone-300 animate-pulse rounded-2xl" />
-    </div>
-  </div>
-)
+  );
 }

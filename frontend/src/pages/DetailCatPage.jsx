@@ -1,22 +1,28 @@
 import { useParams } from "react-router-dom";
 import { useProducts } from "@/hooks/products/useProducts.js";
 import Card from "@/common/Card.jsx";
-import { useEffect } from "react";
 import Heading from "@/common/Heading.jsx";
 import Backgroundtag from "@/components/Backgroundtag.jsx";
 import { Banner, ProductCardSkeleton } from "@/components/ui/Skeletons.jsx";
 import Paginationui from "@/common/Paginationui";
-
+import CatUserFilter from "@/common/CatUserFilter";
+import { useState, useEffect, useRef } from "react";
 const DetailCatPage = () => {
-{/* ── curate data── */}
-
+  {
+    /* ── curate data── */
+  }
+  const [filters, setFilters] = useState({
+    q: "",
+    sort: "createdAt",
+    order: "desc",
+  });
   const config = {
     women: {
       title1: "Women's ",
       title2: " Collection",
       subtitle: "Women",
       filter: { gender: "women" },
-   
+
       description:
         "curated pieces designed for effortless living and quiet confidence.",
     },
@@ -25,7 +31,7 @@ const DetailCatPage = () => {
       title2: " Collection",
       subtitle: "Men",
       filter: { gender: "men" },
-      
+
       description:
         "curated pieces designed for effortless living and quiet confidence.",
     },
@@ -41,7 +47,7 @@ const DetailCatPage = () => {
       title2: " ",
       subtitle: "Accessories",
       filter: { category: "accessory" },
-     
+
       description: "beautifully crafted pieces to complete any look.",
     },
     sale: {
@@ -58,22 +64,33 @@ const DetailCatPage = () => {
   const { title1, title2, subtitle, filter, count, description } =
     config[category];
 
-
   //  const { products, loading, error } = useProducts({filter});
+  const isFirstLoad = useRef(true);
 
-  const { products, loading ,totalPage,page ,setPage } = useProducts(filter);
-  console.log(products,count,totalPage,page)
+  const { products, loading, totalPage, page, setPage } = useProducts({
+    ...filter,
+    ...filters,
+  });
+  console.log(products, count, totalPage, page);
 
-useEffect(() => {
-  setPage(1); 
-}, [category]);
+  useEffect(() => {
+    isFirstLoad.current = true;
+    setPage(1);
+    setFilters({ q: "", sort: "createdAt", order: "desc" });
+  }, [category]);
+  useEffect(() => {
+    if (!loading) {
+      isFirstLoad.current = false;
+      setPage(1);
+    }
+  }, [loading]);
 
   const handlePageChange = (newPage) => {
-  setPage(newPage);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  if (loading)
+  if (loading && isFirstLoad.current)
     return (
       <div>
         {" "}
@@ -102,11 +119,18 @@ useEffect(() => {
           </p>
         </div>
       </div>
-      <div className="bg-white pt-2">
-        <Card products={products} key={category} />
+
+      <div className="bg-white  relative">
+        <CatUserFilter filters={filters} setFilters={setFilters} />
+        {loading && <ProductCardSkeleton />}
+        {!loading && <Card products={products} key={category} />}
       </div>
 
-      <Paginationui totalPage={totalPage} page={page}   onPageChange={handlePageChange} />
+      <Paginationui
+        totalPage={totalPage}
+        page={page}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

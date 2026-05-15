@@ -40,7 +40,7 @@ const Searchquery = () => {
 
   return (
     <div className="relative">
-      <div className="items-center flex gap-2">
+      <div className="items-center flex gap-2  left-0 top-0">
         {searchbar && (
           <div className="flex gap-2 items-center">
             <input

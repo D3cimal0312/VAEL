@@ -27,7 +27,7 @@ const Card = ({ products, limit = products.length, cols = 5 }) => {
     await quickAddToCart(item, defaultColor, defaultSize);
   };
   return (
-    <div className="w-full px-4 lg:px-14 py-7 ">
+    <div className="w-full px-4 lg:px-14 py-4 ">
       <div className={`grid ${gridMap[cols] || gridMap[5]} gap-8`}>
         {products.slice(0, limit).map((item, index) => (
           <div key={index} data-aos="fade-up">

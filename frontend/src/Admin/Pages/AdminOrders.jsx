@@ -35,14 +35,25 @@ const AdminOrders = () => {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { orders, loading, count,totalPage, page, setPage  } = useAdminOrders(filters, refreshKey);
+  const { orders, loading, count, totalPage, page, setPage } = useAdminOrders(
+    filters,
+    refreshKey,
+  );
 
-  
-    const handlePageChange = (newPage) => {
-  setPage(newPage);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const HEADERS = [
+    "Order #",
+    "Customer",
+    "Created Date",
+    "Items",
+    "Total",
+    "Order Status",
+    "Payment",
+    "Actions",
+  ];
 
   const updateFilter = (key, value) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -71,19 +82,19 @@ const AdminOrders = () => {
 
   return (
     <div className="bg-cream-light px-4 ">
-        <Heading mainheading={"Orders"} subheading={"Manage your orders"} />
+      <Heading mainheading={"Orders"} subheading={"Manage your orders"} />
 
       {/* ── MODAL ── */}
       <OrderBillModal opened={opened} close={close} order={currentOrder} />
 
       {/* ── FILTERS ── */}
       <div className="bg-white px-6 py-3  rounded-xl">
-      <OrderFilter
-        filters={filters}
-        updateFilter={updateFilter}
-        clearFilters={clearFilters}
-      />
-</div>
+        <OrderFilter
+          filters={filters}
+          updateFilter={updateFilter}
+          clearFilters={clearFilters}
+        />
+      </div>
       {/* ── HEADER ── */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold text-ink">
@@ -105,16 +116,7 @@ const AdminOrders = () => {
         <table className="w-full border-collapse border border-hair">
           <thead className="bg-lux text-white sticky top-0">
             <tr>
-              {[
-                "Order #",
-                "Customer",
-                "Created Date",
-                "Items",
-                "Total",
-                "Order Status",
-                "Payment",
-                "Actions",
-              ].map((h) => (
+              {HEADERS.map((h) => (
                 <th key={h} className={tableheadClass}>
                   {h}
                 </th>

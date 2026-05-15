@@ -34,7 +34,7 @@ const OrderFilter = ({ filters, updateFilter, clearFilters }) => {
           </label>
           <Searchbar
             updateFilter={updateFilter}
-            filterSelectClass={filterSelectClass}
+
             filters={filters}
             placeHolder="Search by order ID or name"
           />

@@ -118,7 +118,7 @@ const Register = () => {
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-cream-light">
       <div
-        className={`hidden lg:block absolute top-0 z-20 w-1/2 h-full bg-cover bg-center transition-transform duration-700 ease-in-out ${
+        className={`hidden lg:block absolute top-0 z-20 w-1/2 h-full bg-cover bg-center transition-transform duration-700 ease-in-out bg-lux-light ${
           isRegister ? "left-0 translate-x-0" : "left-0 translate-x-full"
         }`}
         style={{ backgroundImage: "url('/main.png')" }}

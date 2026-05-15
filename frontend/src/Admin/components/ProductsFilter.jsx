@@ -3,28 +3,13 @@ import ClearAllbtn from "../common/ClearAllbtn";
 import { useAdminProducts } from "../context/index"
 import Searchbar from "../common/Searchbar";
 import { SlidersHorizontal, LayoutGrid, Users, ArrowUpDown, Package, Tag } from "lucide-react";
-
+import Label from "@/common/Label";
+import IconSelect from "@/common/IconSelect";
 const filterSelectClass =
   "border border-offwhite bg-cream-light text-hair-dark text-[13px] rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-lux transition-colors duration-100 cursor-pointer hover:border-hair w-full appearance-none";
 
-const Label = ({ children }) => (
-  <label className="text-[10px] font-medium uppercase tracking-[0.08em] text-hair opacity-70 block mb-1.5">
-    {children}
-  </label>
-);
 
-const IconSelect = ({ icon: Icon, children, ...props }) => (
-  <div className="relative">
-    <Icon size={13} strokeWidth={1.8} className="absolute left-3 top-1/2 -translate-y-1/2 text-hair pointer-events-none" />
-    <select className={`${filterSelectClass} pl-8`} {...props}>
-      {children}
-    </select>
-  </div>
-);
 
-const Divider = () => (
-  <div className="hidden sm:block h-8 w-px bg-offwhite self-end mb-[2px]" />
-);
 
 const ProductFilter = () => {
   const { filters, updateFilter, clearFilters, categories } = useAdminProducts();
@@ -51,13 +36,12 @@ const ProductFilter = () => {
           <Label>Search</Label>
           <Searchbar
             updateFilter={updateFilter}
-            filterSelectClass={filterSelectClass}
+    
             filters={filters}
             placeHolder="Search products..."
           />
         </div>
 
-        <Divider />
 
         {/* Category */}
         <div className="min-w-[150px]">
@@ -74,7 +58,6 @@ const ProductFilter = () => {
           </IconSelect>
         </div>
 
-        <Divider />
 
         {/* Gender */}
         <div className="min-w-[130px]">
@@ -91,7 +74,6 @@ const ProductFilter = () => {
           </IconSelect>
         </div>
 
-        <Divider />
 
         {/* Status */}
         <div className="min-w-[130px]">
@@ -108,7 +90,6 @@ const ProductFilter = () => {
           </IconSelect>
         </div>
 
-        <Divider />
 
         {/* Stock */}
         <div className="min-w-[130px]">
@@ -156,7 +137,6 @@ const ProductFilter = () => {
           </IconSelect>
         </div>
 
-        <Divider />
 
         {/* Toggles */}
         <div className="flex items-center gap-6 self-end pb-[2px]">

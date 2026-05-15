@@ -3,12 +3,14 @@ import React from "react";
 import { Search } from "lucide-react";
 const Searchbar = ({
   updateFilter,
-  filterSelectClass,
+
   filters,
   placeHolder,
 }) => {
+  const filterSelectClass =
+  "border border-offwhite bg-cream-light text-hair-dark text-xl rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-lux transition-colors duration-100 cursor-pointer hover:border-hair w-full ";
   return (
-    <div className="relative mr-4">
+    <div className="relative mr-4 w-full">
 
                     <Search
                       size={16}

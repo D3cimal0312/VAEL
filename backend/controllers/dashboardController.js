@@ -141,7 +141,7 @@ export const getOverview = async (req, res) => {
         { $unwind: "$category" },
         { $project: { _id: 0, name: "$category.name", count: 1 } },
         { $sort: { count: -1 } },
-        { $limit: 5 },
+        { $limit: 6 },
       ]),
     ]);
 

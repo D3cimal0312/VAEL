@@ -29,13 +29,8 @@ const Land = () => {
   console.log(products, "dasdas");
   return (
     <>
-
-
-    {/* marquue info */}
-      <div
-
-        className="text-hair bg-black py-4 h-14 overflow-hidden "
-      >
+   
+      <div className="text-hair bg-black py-4 h-14 overflow-hidden ">
         <Marquee>
           {servicelists.map((item, index) => (
             <div key={index} className="flex gap-8 items-center">
@@ -47,20 +42,25 @@ const Land = () => {
           ))}
         </Marquee>
       </div>
-      <div className="pl-8 grid grid-cols-2 gap-y-12  overflow-hidden mb-16">
+      <div className="pl-8 md:grid grid-cols-2 gap-y-12  overflow-hidden mb-16">
         <section
-          className=" mt-16 flex flex-col gap-y-8 w-4/5 pl-8"
+          className=" mt-16 flex flex-col gap-y-8 w-full lg:w-4/5 md:pl-8"
           data-aos="fade-up"
         >
-          <div className="flex items-center gap-4 text-lux ">
-            <div className="w-10 h-0.5 bg-lux  outline-none border-none " />
-            <p className="text-xl">{landdesc.tag}</p>
+          <div className="flex items-center gap-3 text-lux">
+            <span className="shrink-0 w-6 sm:w-10 h-0.5 bg-lux" />
+            <span className="whitespace-nowrap text-sm sm:text-base md:text-xl tracking-widest">
+              {landdesc.tag}
+            </span>
           </div>
 
-          <h1 className="text-9xl  font-fair font-bold">
-            Wear What You <span className="text-lux italic">Feel.</span>
+          <h1 className="text-7xl lg:text-8xl xl:text-9xl font-fair font-bold leading-tight">
+            <span className="block whitespace-nowrap">Wear What</span>
+            <span className="block whitespace-nowrap">
+              You <span className="text-lux italic">Feel.</span>
+            </span>
           </h1>
-          <p className="text-hair text-xl">
+          <p className="text-hair text-xl w-full">
             {landdesc.description} {landdesc.description}
           </p>
           <div id="land" className="btndiv flex items-center gap-x-8">
@@ -99,28 +99,28 @@ const Land = () => {
             ))}
           </div>
         </section>
-        <aside className="flex justify-end" data-aos="fade-left">
+        <aside
+          className="flex justify-end w-0 h-0 md:w-auto md:h-auto"
+          data-aos="fade-left"
+        >
 
-          {/* new items grid image  */}
-          <div className="image_grid grid grid-cols-2 gap-2 h-[calc(100vh-100px-56px)] w-4/5  overflow-hidden">
+          <div className=" hidden md:grid lg:grid-cols-2 gap-2 md:h-[calc(100vh-100px-56px)] md:w-4/5  overflow-hidden">
             {products.map((item, index) => (
               <div
                 className="bg-lux-light   overflow-hidden group "
                 key={index}
               >
                 <Link to={`/products/${item.slug}`}>
-                  <div
-                    className="hover:scale-110 transition-all duration-500 overflow-hidden relative"
-                    style={{
-                      backgroundImage: `url(${item.images[0]})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-100" />
-                    <div className="absolute inset-x-0 bottom-6 flex justify-center">
+                  <div className="relative overflow-hidden h-full w-full">
+                    <img
+                      src={item.images[0]}
+                      alt={item.name}
+                      className="h-full w-full object-cover object-center
+               grayscale-40 transition-all duration-400 ease-in-out
+               group-hover:grayscale-0 group-hover:scale-105"
+                    />
+
+                    <div className="absolute inset-x-0 text-sm  bottom-6 flex justify-center group-hover:-translate-y-2  transition-all duration-400 ease-in-out ">
                       <Tags items={item.tags} color="white" />
                     </div>
                   </div>

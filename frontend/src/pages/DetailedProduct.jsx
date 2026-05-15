@@ -69,13 +69,13 @@ const DetailedProduct = () => {
 
   
   return (
-    <div className="pl-12 xl:pl-0 xl:pr-14 pb-12">
+    <div className="  px-4 sm:px-8 md:px-12 lg:px-16 xl:pl-0 xl:pr-14 pb-12">
       <div className="flex gap-24 font-fair flex-wrap xl:flex-nowrap">
         <div
           id="imageSection"
           className="flex-wrap md:flex-nowrap xl:sticky top-0 flex gap-4 h-fit items-center w-full xl:w-200"
         >
-          <div data-aos="fade-up">
+          <div data-aos="fade-up" className="w-full">
             <ImageMagnifier imageSrc={product.images[selectImage]} />
           </div>
           <div className="z-50 flex justify-center ml-4 flex-row md:absolute md:flex-col w-full md:w-fit gap-4 h-full">

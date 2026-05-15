@@ -4,10 +4,10 @@ const Footer = () => {
   return (
     <div className=' bg-black text-cream-light font-fair overflow-hidden ' >
         <div data-aos="fade-up"  data-aos-offet="50" className=" bg-black px-12 py-8 w-full h-full">
-      <div className='flex justify-between gap-4'>
+      <div className='flex flex-wrap md:flex-nowrap justify-between gap-4'>
         <div className='flex flex-col gap-6'>
           <Logo />
-          <p className='w-2/3 text-xl text-hair'>Wear What You Feel. VAEL is a quiet luxury fashion brand for those who dress with intention, not noise.</p>
+          <p className='md:w-2/3 w-full text-xl text-hair'>Wear What You Feel. VAEL is a quiet luxury fashion brand for those who dress with intention, not noise.</p>
           <div className="flex gap-4">
 {Array.from({ length: 4 }).map((_, i) => (
   <p key={i} className="linked hover:text-lux transition-colors duration-200 border-2  border-black h-12 w-12 rounded-full flex items-center justify-center hover:border-lux">IG</p>
@@ -15,7 +15,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex justify-around w-1/3 font-sans">
+        <div className="flex w-full md:w-1/3 gap-16 font-sans">
           <div className='text-xl'>
             <h1 className="font-semibold text-cream mb-6">Help</h1>
             <div className="text-[18px] tracking-widest  flex flex-col text-hair font-sans">
@@ -50,7 +50,7 @@ const Footer = () => {
         <p>@2026 Vael. All rights reserved. Built with fingers dude</p>
         <div className='flex gap-8'>
           {["Khalti", "Esewa", "ImePay"].map((pay) => (
-            <p key={pay} className=" text-cream-light bg-hair-dark px-2 py-1 rounded-md w-fit">
+            <p key={pay} className=" text-cream-light bg-hair-dark px-2 py-1 h-fit rounded-md w-fit">
               {pay}
             </p>
           ))}

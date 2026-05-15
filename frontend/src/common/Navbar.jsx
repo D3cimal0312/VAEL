@@ -52,7 +52,7 @@ const Navbar = () => {
 
         {/* Icons */}
 
-        <div className="flex gap-5 md:gap-8 items-center ">
+        <div className="flex gap-5 md:gap-8 items-center  ">
           <Searchquery />
 
           <NavLink to="/profile">
