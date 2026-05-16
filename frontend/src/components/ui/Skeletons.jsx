@@ -159,3 +159,109 @@ export function DashboardSkeleton() {
     </div>
   );
 }
+
+
+export function CartSkeleton() {
+  return (
+    <div className="font-fair flex flex-col md:flex-row min-h-screen">
+
+ 
+      <div className="flex-1 px-6 md:px-14 py-14 bg-white">
+
+      
+        <div className="h-8 w-40 bg-stone-300 animate-pulse mb-8" />
+
+
+        <div className="flex justify-between items-center mb-8">
+          <div className="h-5 w-24 bg-stone-300 animate-pulse" />
+          <div className="h-5 w-24 bg-stone-300 animate-pulse" />
+        </div>
+
+        
+        <div className="flex flex-col gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex gap-4 md:gap-8 border-b pb-6 border-gray-200">
+
+          
+              <div className="w-24 md:w-36 h-42 bg-stone-300 animate-pulse shrink-0" />
+
+              <div className="w-full flex flex-col gap-3">
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-2">
+                    <div className="h-4 w-24 bg-stone-300 animate-pulse" />
+                    <div className="h-6 w-40 bg-stone-300 animate-pulse" />
+                    <div className="h-4 w-32 bg-stone-300 animate-pulse" />
+
+                    <div className="flex gap-1 mt-1">
+                      <div className="h-8 w-8 bg-stone-300 animate-pulse" />
+                      <div className="h-8 w-8 bg-stone-300 animate-pulse" />
+                      <div className="h-8 w-8 bg-stone-300 animate-pulse" />
+                    </div>
+                  </div>
+                  
+                  <div className="h-8 w-20 bg-stone-300 animate-pulse" />
+                </div>
+
+  
+                <div className="flex justify-between mt-2">
+                  <div className="h-5 w-28 bg-stone-300 animate-pulse" />
+                  <div className="h-5 w-20 bg-stone-300 animate-pulse" />
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+
+        <div className="h-12 w-48 bg-stone-300 animate-pulse mt-6" />
+      </div>
+
+      <div className="w-full md:w-96  border-t md:border-t-0 md:border-l border-hair bg-cream-light p-4 md:p-8">
+
+   
+        <div className="h-4 w-24 bg-stone-300 animate-pulse mb-4" />
+
+        
+        <div className="flex gap-3 mb-4">
+          <div className="h-9 flex-1 bg-stone-300 animate-pulse rounded-lg" />
+          <div className="h-9 flex-1 bg-stone-300 animate-pulse rounded-lg" />
+        </div>
+
+
+        <div className="rounded-xl bg-stone-200 animate-pulse p-4 flex flex-col gap-3 mb-6">
+          <div className="h-5 w-32 bg-stone-300 animate-pulse" />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="h-4 w-full bg-stone-300 animate-pulse" />
+            <div className="h-4 w-full bg-stone-300 animate-pulse" />
+            <div className="h-4 w-full bg-stone-300 animate-pulse" />
+            <div className="h-4 w-full bg-stone-300 animate-pulse" />
+          </div>
+          <div className="h-4 w-28 bg-stone-300 animate-pulse mt-1" />
+        </div>
+
+    
+        <div className="h-7 w-40 bg-stone-300 animate-pulse mb-4" />
+
+     
+        <div className="flex flex-col gap-3 mb-8">
+          {["Subtotal", "Tax", "Shipping"].map((l) => (
+            <div key={l} className="flex justify-between">
+              <div className="h-5 w-20 bg-stone-300 animate-pulse" />
+              <div className="h-5 w-16 bg-stone-300 animate-pulse" />
+            </div>
+          ))}
+          <div className="border-t border-stone-300 pt-3 flex justify-between mt-1">
+            <div className="h-7 w-16 bg-stone-300 animate-pulse" />
+            <div className="h-7 w-20 bg-stone-300 animate-pulse" />
+          </div>
+        </div>
+
+        
+        <div className="h-14 w-full bg-stone-300 animate-pulse" />
+
+      </div>
+
+    </div>
+  );
+}

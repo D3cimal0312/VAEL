@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { LayoutDashboard, Package, ShoppingBag, Users, Tag, LogOut } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
+
 const mainlink = "/admin";
 
 const navSections = [
@@ -37,10 +38,10 @@ const AdminNav = () => {
             <LayoutDashboard size={17} className="text-cream" strokeWidth={1.8} />
           </div>
           <div>
-            <p className="text-[13.5px] font-medium text-hair-dark leading-tight m-0">
-              Your Store
+            <p className=" font-medium text-hair-dark leading-tight m-0">
+              <Logo></Logo>
             </p>
-            <p className="text-[10.5px] text-hair uppercase tracking-widest m-0">
+            <p className="text-lg text-hair uppercase tracking-widest m-0">
               Admin Panel
             </p>
           </div>
@@ -51,7 +52,7 @@ const AdminNav = () => {
       <div className="flex-1 overflow-y-auto py-3">
         {navSections.map((section) => (
           <div key={section.label} className="mt-4">
-            <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-hair opacity-70 px-5 mb-1">
+            <p className="text-[10px] font-medium uppercase  text-hair opacity-70 px-5 mb-1">
               {section.label}
             </p>
 
@@ -107,3 +108,6 @@ const AdminNav = () => {
 };
 
 export default AdminNav;
+
+
+

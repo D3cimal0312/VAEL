@@ -15,10 +15,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex w-full md:w-1/3 gap-16 font-sans">
+        <div className="flex  gap-16 ">
           <div className='text-xl'>
             <h1 className="font-semibold text-cream mb-6">Help</h1>
-            <div className="text-[18px] tracking-widest  flex flex-col text-hair font-sans">
+            <div className="text-lg tracking-widest  flex flex-col text-hair font-sans">
              {["New In", "Women", "Men", "Accessories", "Sale"].map((item, index) => (
     <p className="linked mb-1 hover:text-lux transition-all duration-300 w-fit" key={index}>
       {item}
@@ -31,7 +31,7 @@ const Footer = () => {
 
           <div className='text-xl'>
             <h1 className="font-semibold text-cream mb-6">Help</h1>
-            <div className="text-[18px] tracking-widest  flex flex-col text-hair font-sans">
+            <div className="text-lg tracking-widest  flex flex-col text-hair font-sans">
              {["Size Guides", "Returns", "Track Order", "Careers", "Contact Us"].map((item, index) => (
     <p className="linked mb-1 hover:text-lux transition-all duration-300 w-fit" key={index}>
       {item}

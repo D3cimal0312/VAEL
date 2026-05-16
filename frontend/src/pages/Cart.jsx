@@ -1,34 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Heading from "@/common/Heading";
 import { useNavigate } from "react-router";
 import Quantity from "@/common/Quantity.jsx";
-import { useState, useEffect } from "react";
-import Animatebtn from "@/common/Animatebtn.jsx";
 import useCart from "@/hooks/carts/useCarts";
-
+import OrderSummary from "@/pages/OrderSummary";
 import { Trash2, ExternalLink } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useAddress } from "@/context/AddressContext";
 import { orderService } from "@/services/orderService";
 import toast from "react-hot-toast";
 
-// ✅ Helper function - formats all prices consistently to 2 decimals
+import { CartSkeleton } from "@/components/ui/Skeletons";
+
 const formatPrice = (price) => {
   return parseFloat((Math.round(price * 100) / 100).toFixed(2));
 };
 
 const Cart = () => {
   const { user } = useAuth();
+  const { getAddressSnapshot, hasHome, hasWork, selectedId } = useAddress();
   const [ordering, setOrdering] = useState(false);
-
-  const { cart, setCart, loading, count, removeFromCart, updateQuantity, clearCart } = useCart();
-  console.log(cart);
+  const { cart, loading, count, removeFromCart, updateQuantity, clearCart } = useCart();
   const [quantities, setQuantities] = useState({});
+  const navigate = useNavigate();
 
-  // Initialize quantities from cart data once loaded
   useEffect(() => {
     if (cart?.length) {
       const initial = Object.fromEntries(
-        cart.map((item) => [item._id, item.quantity]),
+        cart.map((item) => [item._id, item.quantity])
       );
       setQuantities(initial);
     }
@@ -39,13 +38,11 @@ const Cart = () => {
     updateQuantity(id, value);
   };
 
-  //  Calculate prices using formatPrice helper
   const subPrice = formatPrice(
     cart?.reduce(
       (sum, item) =>
-        sum +
-        (item.productId?.price || 0) * (quantities[item._id] || item.quantity),
-      0,
+        sum + (item.productId?.price || 0) * (quantities[item._id] || item.quantity),
+      0
     ) || 0
   );
 
@@ -55,18 +52,13 @@ const Cart = () => {
 
   const orderSummary = [
     { label: "Subtotal", value: subPrice },
-    { label: "Tax", value: tax },
+    { label: "Tax",      value: tax },
     { label: "Shipping", value: shipping },
-    { label: "Total", value: totalPrice },
+    { label: "Total",    value: totalPrice },
   ];
 
-  const navigate = useNavigate();
-
-  if (loading)
-    return <p className="p-14 font-fair text-2xl">Loading cart...</p>;
-
   const handleOrder = async () => {
-    if (!cart || count == 0) {
+    if (!cart || count === 0) {
       toast.error("Your cart is empty");
       return;
     }
@@ -75,12 +67,16 @@ const Cart = () => {
       setTimeout(() => navigate("/auth/register"), 2000);
       return;
     }
+    const selectedHasAddress = selectedId === "home" ? hasHome : hasWork;
+    if (!selectedHasAddress) {
+      toast.error(`Please add a ${selectedId} address before checkout.`);
+      return;
+    }
 
     setOrdering(true);
 
-{/* ── seeting data into proper format  ── */}
     const orderData = {
-      items: cart.map(item => ({
+      items: cart.map((item) => ({
         productId: item.productId._id,
         name: item.productId.name,
         price: formatPrice(item.productId.price),
@@ -94,20 +90,13 @@ const Cart = () => {
         tax: tax,
         total: totalPrice,
       },
-      shippingAddress: {
-        houseNum: "12B",
-        localAddress: "Lazimpat, Kathmandu",
-        district: "Kathmandu",
-        province: "Bagmati",
-        phone: "9841000000"
-      },
+      shippingAddress: getAddressSnapshot(),
     };
 
     try {
-      const order = await orderService.createOrder(orderData);
+      await orderService.createOrder(orderData);
       await clearCart();
       toast.success("Order placed!");
-      // navigate(`/orders/${order.orderNumber}`);
     } catch (e) {
       toast.error(e.message || "Failed to place order");
     } finally {
@@ -115,18 +104,25 @@ const Cart = () => {
     }
   };
 
+  if (loading) return <CartSkeleton />;
+
   return (
-    <div className="font-fair grid grid-cols-6">
-      <div className="px-14 col-span-4 py-14 bg-white">
+    <div className="font-fair flex flex-col md:flex-row min-h-screen">
+
+   
+      <div className="flex-1 px-6 md:px-14 py-14 bg-white">
         <Heading mainheading="Your Cart" />
 
         <div className="flex justify-between items-center">
           <div className="text-xl flex justify-end items-center mb-8 text-lux font-bold underline underline-offset-8 decoration-dotted decoration-gray-300">
-            <p>Items:<span className="font-sans ">{count}</span></p>
+            <p>Items:<span className="font-sans">{count}</span></p>
           </div>
           {cart && count > 0 && (
-            <div className="flex justify-center items-center text-red-400 cursor-pointer" onClick={() => clearCart()}>
-              <Trash2 className="" size={18} />
+            <div
+              className="flex justify-center items-center text-red-400 cursor-pointer"
+              onClick={() => clearCart()}
+            >
+              <Trash2 size={18} />
               <button>Empty Cart</button>
             </div>
           )}
@@ -139,23 +135,20 @@ const Cart = () => {
             const itemPrice = formatPrice(product?.price * qty);
 
             return (
-              <div
-                key={item._id}
-                className="flex gap-8 border-b pb-4 border-gray-200"
-              >
+              <div key={item._id} className="flex gap-4 md:gap-8 border-b pb-4 border-gray-200">
                 <div>
                   <img
                     src={product?.images?.[0]}
                     alt={product?.name}
-                    className="w-36 h-42"
+                    className="w-24 md:w-36 h-42"
                   />
                 </div>
 
                 <div className="w-full">
-                  <div className="flex justify-between flex-1 ">
+                  <div className="flex justify-between flex-1">
                     <div id="purchase_info" className="text-lg">
                       <p className="uppercase text-lux">{product?.name}</p>
-                      <p className="text-2xl">{product?.name}</p>
+                      <p className="text-xl md:text-2xl">{product?.name}</p>
                       <p className="text-hair">
                         <span>{item.color?.name}</span>
                         <span> . </span>
@@ -167,27 +160,22 @@ const Cart = () => {
                         setQuantity={(val) => updateQuantityui(item._id, val)}
                       />
                     </div>
-
                     <div className="h-fit">
-                      <p className="text-4xl text-lux">
-                        ${itemPrice.toFixed(2)}
-                      </p>
+                      <p className="text-2xl md:text-4xl text-lux">${itemPrice.toFixed(2)}</p>
                     </div>
                   </div>
 
-                  <div className="flex justify-between mt-4 w-full ">
-                    {/* View Detail */}
+                  <div className="flex justify-between mt-4 w-full">
                     <button
                       onClick={() => navigate(`/products/${product?.slug}`)}
-                      className="flex items-center gap-1.5 text-2xl text-gray-500 hover:text-black transition-colors duration-150"
+                      className="flex items-center gap-1.5 text-lg md:text-2xl text-gray-500 hover:text-black transition-colors duration-150"
                     >
                       <ExternalLink size={20} />
                       <span>View Detail</span>
                     </button>
-
                     <button
                       onClick={() => removeFromCart(item._id)}
-                      className="flex items-center gap-1.5 text-xl  text-red-400 hover:text-red-500 transition-colors duration-150"
+                      className="flex items-center gap-1.5 text-base md:text-xl text-red-400 hover:text-red-500 transition-colors duration-150"
                     >
                       <Trash2 size={18} />
                       <span>Remove</span>
@@ -207,34 +195,15 @@ const Cart = () => {
         </button>
       </div>
 
-      <div className="col-span-2 border-l border-hair p-8 py-14 bg-cream-light">
-        <Heading macroheading={"Order Summary"} />
 
-        <div className="pt-4 mb-14">
-          {orderSummary.map((item) => (
-            <div
-              key={item.label}
-              className={`flex justify-between text-2xl gap-2 ${
-                item.label === "Total" ? "border-t border-black mt-4 pt-4" : ""
-              }`}
-            >
-              <p className={item.label === "Total" ? "text-4xl" : ""}>
-                {item.label}
-              </p>
-              <p className={item.label === "Total" ? "text-lux text-4xl" : ""}>
-                ${item.value.toFixed(2)}
-              </p>
-            </div>
-          ))}
-          <div className="text-sm text-gray-500 pt-2">
-            *Shipping cost is subject to change based on location and free on orders $799 and above
-          </div>
-        </div>
-
-        <div onClick={handleOrder}>
-          <Animatebtn str={"Proceed to Checkout"} />
-        </div>
+      <div className="w-full md:w-96  md:sticky md:top-0 md:h-screen md:overflow-y-auto border-t md:border-t-0 md:border-l border-hair bg-cream-light">
+        <OrderSummary
+          orderSummary={orderSummary}
+          onCheckout={handleOrder}
+          ordering={ordering}
+        />
       </div>
+
     </div>
   );
 };
