@@ -23,7 +23,7 @@ export default function useFavourite() {
       setCount(data.count);
       return data;
     } catch (e) {
-      toast.error(e.message);
+      toast.error(e.response?.data?.message || "Failed to fetch favourites");
       setItems([]);
       setCount(0);
     } finally {
@@ -57,7 +57,7 @@ export default function useFavourite() {
           : "Removed from favourites",
       );
     } catch (e) {
-      toast.error(e.message);
+      toast.error(e.response?.data?.message || "Failed to toggle favourite");
     }
   };
 
@@ -69,7 +69,7 @@ export default function useFavourite() {
       setCount(data.count);
       toast.success("Favourites cleared");
     } catch (e) {
-      toast.error(e.message);
+      toast.error(e.response?.data?.message || "Failed to clear favourites");
     }
   };
 

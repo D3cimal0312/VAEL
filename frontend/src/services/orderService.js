@@ -9,10 +9,8 @@ async createOrder(orderData){
     return res.data
     }catch(error){
         console.error('Error creating order:', error);
-        throw new Error(
-             
-            'Failed to create order'
-        );
+    throw error;
+    
     }
 },
 

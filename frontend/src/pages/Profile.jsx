@@ -10,10 +10,10 @@ import Addressbox from "@/components/Addressbox";
 import { LogOut, Package, Heart, Wallet, Mail, CalendarDays } from "lucide-react";
 
 const Profile = () => {
-  const spentmoney = 4000;
+
   const { LogoutUser } = useAuth();
   const { count, items, loadings } = useFavourite();
-  const { order, count: orderCount, loading: orderLoadings } = useOrders();
+  const { order, count: orderCount, loading: orderLoadings,spent } = useOrders();
   const { userDetails, loading } = useUser();
 
 
@@ -31,7 +31,7 @@ const Profile = () => {
   const stats = [
     { icon: Package, label: "Orders",     value: orderCount },
     { icon: Heart,   label: "Favourites", value: count },
-    { icon: Wallet,  label: "Spent",      value: `Rs. ${spentmoney}` },
+    { icon: Wallet,  label: "Spent",      value: `$. ${spent}` },
   ];
 
   return (
@@ -83,7 +83,7 @@ const Profile = () => {
               <p className="text-lg uppercase  text-gray-400">{label}</p>
               <Icon size={16} className="text-lux opacity-60" />
             </div>
-            <p className="font-cormorant text-4xl font-medium text-lux leading-none">{value}</p>
+            <p className="font-fair text-4xl font-medium text-lux leading-none">{value}</p>
           </div>
         ))}
 

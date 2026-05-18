@@ -11,12 +11,8 @@ export const createProduct = async (req, res) => {
 
     const tags = JSON.parse(req.body.tags || "[]");
     const sizes = JSON.parse(req.body.sizes || "[]");
-
     const colors = JSON.parse(req.body.colors || "[]");
-
     const soldOut = JSON.parse(req.body.soldOut || "[]");
-
-    console.log("error");
 
     const product = await Products.create({
       ...req.body,
@@ -29,15 +25,19 @@ export const createProduct = async (req, res) => {
     });
 
     if (!product) {
-      return res.status(404).json({
-        message: "Product creation issue",
-      });
+      return res.status(404).json({ message: "Product creation failed" });
     }
     res.status(201).json({ data: product });
   } catch (err) {
-    console.log(err);
-
-    res.status(400).json({ message: err.message });
+    console.error(err);
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message });
+    }
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "A product with this slug already exists" });
+    }
+    res.status(500).json({ message: "Failed to create product" });
   }
 };
 
@@ -69,21 +69,23 @@ export const updateProduct = async (req, res) => {
     const product = await Products.findByIdAndUpdate(
       req.params.id,
       updatedData,
-      {
-        new: true,
-        runValidators: true,
-      },
+      { new: true, runValidators: true },
     );
 
     if (!product) {
-      return res.status(404).json({
-        message: "product was not found",
-      });
+      return res.status(404).json({ message: "Product not found" });
     }
     res.status(200).json({ data: product });
   } catch (err) {
     console.error(err);
-    res.status(400).json({ message: err.message });
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message });
+    }
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "A product with this slug already exists" });
+    }
+    res.status(500).json({ message: "Failed to update product" });
   }
 };
 
@@ -96,12 +98,13 @@ export const deleteProduct = async (req, res) => {
     //
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found to delete" });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     res.status(200).json({ message: "product has been succesffuly deleted" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to delete product" });
   }
 };
 
@@ -193,10 +196,7 @@ export const getAllProducts = async (req, res) => {
     const skip = (page - 1) * limit;
 
     let products = await Products.find(filter)
-      .populate({
-        path:"category",
-        select:"name"
-      })
+      .populate({ path: "category", select: "name" })
       .skip(skip)
       .limit(Number(limit))
       .sort(sortObj);
@@ -206,14 +206,13 @@ export const getAllProducts = async (req, res) => {
     // }
 
     const totalCount = await Products.countDocuments(filter);
-
     const totalPage = Math.ceil(totalCount / Number(limit));
     // console.log(totalPage,page,"total count",totalCount)
-    res
-      .status(200)
-      .json({ count: totalCount, totalPage, page, data: products });
+
+    res.status(200).json({ count: totalCount, totalPage, page, data: products });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch products" });
   }
 };
 
@@ -232,7 +231,8 @@ export const getProductBySlug = async (req, res) => {
 
     res.status(200).json({ data: product });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch product" });
   }
 };
 
@@ -253,6 +253,7 @@ export const getProductById = async (req, res) => {
 
     res.status(200).json({ data: product });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch product" });
   }
 };

@@ -18,25 +18,19 @@ import RateStars from "@/common/RateStars";
 
 import useCart from "@/hooks/carts/useCarts";
 
-
 import useFavourite from "@/hooks/favourites/useFavourites";
 
 const DetailedProduct = () => {
+  const { toggleFavourite, isFavourite } = useFavourite();
 
-
-
-    const { toggleFavourite, isFavourite } = useFavourite();
-  
-
-  const {addToCart} = useCart();
+  const { addToCart } = useCart();
   const { slug } = useParams();
 
   const { product, loading } = useProduct(slug);
- const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [currentColor, setCurrentColor] = useState(null);
   const [selectImage, setSelectImage] = useState(0);
   const [selectSize, setSelectSize] = useState(null);
-
 
   const { products: similarProducts } = useProducts({
     tags: product?.tags?.join(","),
@@ -65,9 +59,6 @@ const DetailedProduct = () => {
 
   if (!product) return <p>Product not found</p>;
 
-
-
-  
   return (
     <div className="  px-4 sm:px-8 md:px-12 lg:px-16 xl:pl-0 xl:pr-14 pb-12">
       <div className="flex gap-24 font-fair flex-wrap xl:flex-nowrap">
@@ -108,8 +99,8 @@ const DetailedProduct = () => {
           />
 
           <div className="flex items-center gap-2 font-serif">
- <RateStars rating={Number(product.rating)}/>
- 
+            <RateStars rating={Number(product.rating)} />
+
             <p>{product.rating}</p>
             <p>{product?.reviews} Reviews</p>
           </div>
@@ -184,16 +175,33 @@ const DetailedProduct = () => {
 
             <div className="flex gap-4 items-center">
               <p className="tracking-wider font-serif text-xl">QTY:</p>
-              <Quantity quantity={quantity} setQuantity={setQuantity} />
+              <Quantity quantity={quantity} setQuantity={setQuantity}
+                        stock={product?.stock}
+               />
             </div>
           </div>
 
           <div className="flex gap-1">
-            <div className="w-full" onClick={()=>{addToCart(product,quantity,currentColor,selectSize)}}>
-            <Animatebtn str={"Add to Cart"} />
+            <div
+              className="w-full"
+              onClick={() => {
+                if (product.stock !== 0)
+                  addToCart(product, quantity, currentColor, selectSize);
+              }}
+            >
+              <Animatebtn
+                str={"Add to Cart"}
+                outofStock={product.stock === 0 ? true : false}
+              />
             </div>
-            <button onClick={() => toggleFavourite(product)} className="border-2 text-lux p-4 hover:bg-lux hover:text-white border-lux transition-all duration-150 ease-out">
-              <Heart fill={isFavourite(product._id) ? "#d4905a" : "white"} size={isFavourite(product._id) ? "28" : "22"} />
+            <button
+              onClick={() => toggleFavourite(product)}
+              className="border-2 text-lux p-4 hover:bg-lux hover:text-white border-lux transition-all duration-150 ease-out"
+            >
+              <Heart
+                fill={isFavourite(product._id) ? "#d4905a" : "white"}
+                size={isFavourite(product._id) ? "28" : "22"}
+              />
             </button>
           </div>
 

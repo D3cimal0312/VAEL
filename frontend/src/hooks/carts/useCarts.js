@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { cartService } from "@/services/cartService";
+import {cartService} from "@/services/cartService";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 
@@ -23,8 +23,7 @@ export default function useCart() {
           setCart(getLocalCart());
         }
       } catch (e) {
-        toast.error(e.message); // toast handles it like everything else
-
+        toast.error(e.response?.data?.message || "Failed to fetch cart");
       } finally {
         setLoading(false);
       }
@@ -56,9 +55,8 @@ export default function useCart() {
       }
       toast.success("Added to cart!");
     } catch (e) {
-      // toast.error("Failed to add to cart");
-toast.error(e.message)
-      throw (e.message); // throw so quickAddToCart knows it failed
+      toast.error(e.response?.data?.message || "Failed to add to cart");
+      throw e;
     }
   };
 
@@ -67,7 +65,7 @@ toast.error(e.message)
       console.log("hello quick add");
       await addToCart(product, 1, defaultColor, defaultSize);
     } catch (e) {
-      //  no toast here / addToCart already fired one
+      //  no toast here — addToCart already fired one
     }
   };
 
@@ -84,8 +82,7 @@ toast.error(e.message)
       }
       toast.success("Item removed from cart");
     } catch (e) {
-      // toast.error(e.message || "Failed to remove item");
-toast.error(e.message)
+      toast.error(e.response?.data?.message || "Failed to remove item");
     }
   };
 
@@ -102,10 +99,8 @@ toast.error(e.message)
         setLocalCart(updated);
         setCart(updated);
       }
-
     } catch (e) {
-      // toast.error(e.message || "Failed to update quantity");
-toast.error(e.message)
+      toast.error(e.response?.data?.message || "Failed to update quantity");
     }
   };
 
@@ -119,8 +114,7 @@ toast.error(e.message)
       setCart([]);
       toast.success("Cart cleared");
     } catch (e) {
-      // toast.error(e.message || "Failed to clear cart");
-toast.error(e.message)
+      toast.error(e.response?.data?.message || "Failed to clear cart");
     }
   };
 

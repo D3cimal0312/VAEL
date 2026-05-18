@@ -199,7 +199,8 @@ export const getOverview = async (req, res) => {
     cache.set(CACHE_KEY, data, CACHE_TTL);
     return res.json({ success: true, data });
   } catch (error) {
-    console.log(error);
+     console.error(error);
+    return res.status(500).json({ success: false, message: "Failed to load dashboard data" });
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

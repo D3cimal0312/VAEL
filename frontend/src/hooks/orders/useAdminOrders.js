@@ -20,7 +20,7 @@ export function useAdminOrders(filters = {}, refreshKey = 0) {
         setTotalPage(data.totalPage);
 
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch orders");
       } finally {
         setLoading(false);
       }

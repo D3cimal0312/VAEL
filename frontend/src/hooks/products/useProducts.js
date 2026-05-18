@@ -21,7 +21,7 @@ export function useProducts(filters = {}, refreshKey = 0) {
         setTotalPage(data.totalPage);
       
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch products");
       } finally {
         setLoading(false);
       }
@@ -45,7 +45,7 @@ export function useProduct(slug) {
         const data = await productService.getBySlug(slug);
         setProduct(data);
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch product");
       } finally {
         setLoading(false);
       }

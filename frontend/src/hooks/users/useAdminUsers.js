@@ -21,7 +21,7 @@ export function useAdminUsers(filter={}, refreshKey = 0) {
         setTotalPage(data.totalPage);
 
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch users");
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ export function useUserMutations() {
     try {
       return await userService.update(id, data);
     } catch (e) {
-      toast.error(e.message);
+         toast.error(e.response?.data?.message || "Failed to update user");
       return null;
     } finally {
       setLoading(false);

@@ -13,14 +13,12 @@ export function useUser() {
       setLoading(true);
       try {
         const user = JSON.parse(localStorage.getItem('user'));
-        console.log(user)
+        console.log(user);
         if (!user?.id) return;
         const data = await userService.getProfile(user.id);
-        console.log("error")
-
         setUserDetails(data);
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch profile");
       } finally {
         setLoading(false);
       }

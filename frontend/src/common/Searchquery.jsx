@@ -28,7 +28,7 @@ const Searchquery = () => {
         const data = await productService.getAll({ q: search, limit: 8 });
         setProducts(data);
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response?.data?.message || "Failed to search products");
         setProducts(null);
       } finally {
         setLoading(false);

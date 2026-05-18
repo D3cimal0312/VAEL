@@ -34,8 +34,9 @@ export function ProductsProvider({ children }) {
       try {
         const res = await categoryService.simpleCategories();
         setCategories(res);
-      } catch (err) {
-        console.error("Failed to fetch categories");
+      }  catch (err) {
+        console.error(err);
+        toast.error(err.response?.data?.message || "Failed to fetch categories");
       }
     };
     fetchCategories();

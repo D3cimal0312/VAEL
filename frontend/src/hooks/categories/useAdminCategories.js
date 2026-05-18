@@ -14,23 +14,21 @@ export function useAdminCategories(filters={}, refreshKey = 0) {
     async function fetch() {
       setLoading(true);
       try {
-        const data = await categoryService.getAll({...filters,page});
+        const data = await categoryService.getAll({...filters, page});
         // console.log(data,"data from use admin categories")
-
         setCategories(data.data);
         setCount(data.count);
         setTotalPage(data.totalPage);
-
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch categories");
       } finally {
         setLoading(false);
       }
     }
     fetch();
-  }, [JSON.stringify(filters),refreshKey,page]);
+  }, [JSON.stringify(filters), refreshKey, page]);
 
-  return { categories, loading,count ,totalPage, page, setPage};
+  return { categories, loading, count, totalPage, page, setPage };
 }
 
 // get single by id
@@ -39,14 +37,14 @@ export function useAdminCategory(id) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id || id===null) return;
+    if (!id || id === null) return;
     async function fetch() {
       setLoading(true);
       try {
         const data = await categoryService.getById(id);
         setCategory(data);
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch category");
       } finally {
         setLoading(false);
       }

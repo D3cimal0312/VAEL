@@ -33,25 +33,22 @@ const AdminCustomers = () => {
   const [editValues, setEditValues] = useState({});
   console.log(users);
 
-  const handleSave = async (id) => {
-    try {
-      console.log(editValues.role);
-      console.log(editValues.isActive);
-
-      if (id) {
-        const data = {
-          role: editValues.role,
-          isActive: editValues.isActive,
-        };
-        await userService.update(id, data);
-        refetch();
-      }
-    } catch (err) {
-      console.log(err.message);
+const handleSave = async (id) => {
+  try {
+    if (id) {
+      const data = {
+        role: editValues.role,
+        isActive: editValues.isActive,
+      };
+      await userService.update(id, data);
+      toast.success("User updated successfully");
+      refetch();
     }
-
-    setEditingId(null);
-  };
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to update user");
+  }
+  setEditingId(null);
+};
 
   const tableheadClass =
     "border border-hair px-4 py-2 text-left text-sm font-semibold";

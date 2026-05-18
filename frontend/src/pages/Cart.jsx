@@ -10,6 +10,8 @@ import { useAddress } from "@/context/AddressContext";
 import { orderService } from "@/services/orderService";
 import toast from "react-hot-toast";
 
+import CartDialog from "@/components/CartDialog";
+
 import { CartSkeleton } from "@/components/ui/Skeletons";
 
 const formatPrice = (price) => {
@@ -20,14 +22,17 @@ const Cart = () => {
   const { user } = useAuth();
   const { getAddressSnapshot, hasHome, hasWork, selectedId } = useAddress();
   const [ordering, setOrdering] = useState(false);
-  const { cart, loading, count, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cart, loading, count, removeFromCart, updateQuantity, clearCart } =
+    useCart();
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
+  const [outOfStockItems, setOutOfStockItems] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
     if (cart?.length) {
       const initial = Object.fromEntries(
-        cart.map((item) => [item._id, item.quantity])
+        cart.map((item) => [item._id, item.quantity]),
       );
       setQuantities(initial);
     }
@@ -41,9 +46,10 @@ const Cart = () => {
   const subPrice = formatPrice(
     cart?.reduce(
       (sum, item) =>
-        sum + (item.productId?.price || 0) * (quantities[item._id] || item.quantity),
-      0
-    ) || 0
+        sum +
+        (item.productId?.price || 0) * (quantities[item._id] || item.quantity),
+      0,
+    ) || 0,
   );
 
   const tax = formatPrice(0.13 * subPrice);
@@ -52,19 +58,19 @@ const Cart = () => {
 
   const orderSummary = [
     { label: "Subtotal", value: subPrice },
-    { label: "Tax",      value: tax },
+    { label: "Tax", value: tax },
     { label: "Shipping", value: shipping },
-    { label: "Total",    value: totalPrice },
+    { label: "Total", value: totalPrice },
   ];
 
-  const handleOrder = async () => {
+  const handleOrder = async (skipOutOfStock = false) => {
     if (!cart || count === 0) {
       toast.error("Your cart is empty");
       return;
     }
     if (!user) {
       toast.error("Please login/register to buy products.");
-      setTimeout(() => navigate("/auth/register"), 2000);
+      setTimeout(() => navigate("/auth/register"), 3000);
       return;
     }
     const selectedHasAddress = selectedId === "home" ? hasHome : hasWork;
@@ -76,6 +82,7 @@ const Cart = () => {
     setOrdering(true);
 
     const orderData = {
+      skipOutOfStock,
       items: cart.map((item) => ({
         productId: item.productId._id,
         name: item.productId.name,
@@ -93,12 +100,22 @@ const Cart = () => {
       shippingAddress: getAddressSnapshot(),
     };
 
+    // console.log("items check", JSON.stringify(orderData.items));
+    // console.log("pricing check", JSON.stringify(orderData.pricing));
+    // console.log("address check", JSON.stringify(orderData.shippingAddress));
+    // console.log("skip check", orderData.skipOutOfStock);
     try {
       await orderService.createOrder(orderData);
       await clearCart();
       toast.success("Order placed!");
     } catch (e) {
-      toast.error(e.message || "Failed to place order");
+      console.log("error response", e.response?.data);
+      if (e.response?.data?.outOfStockItems) {
+        setOutOfStockItems(e.response.data.outOfStockItems);
+        setShowDialog(true);
+        return;
+      }
+toast.error(e.response?.data?.message || "Failed to place order");
     } finally {
       setOrdering(false);
     }
@@ -108,14 +125,14 @@ const Cart = () => {
 
   return (
     <div className="font-fair flex flex-col md:flex-row min-h-screen">
-
-   
       <div className="flex-1 px-6 md:px-14 py-14 bg-white">
         <Heading mainheading="Your Cart" />
 
         <div className="flex justify-between items-center">
           <div className="text-xl flex justify-end items-center mb-8 text-lux font-bold underline underline-offset-8 decoration-dotted decoration-gray-300">
-            <p>Items:<span className="font-sans">{count}</span></p>
+            <p>
+              Items:<span className="font-sans">{count}</span>
+            </p>
           </div>
           {cart && count > 0 && (
             <div
@@ -135,7 +152,10 @@ const Cart = () => {
             const itemPrice = formatPrice(product?.price * qty);
 
             return (
-              <div key={item._id} className="flex gap-4 md:gap-8 border-b pb-4 border-gray-200">
+              <div
+                key={item._id}
+                className="flex gap-4 md:gap-8 border-b pb-4 border-gray-200"
+              >
                 <div>
                   <img
                     src={product?.images?.[0]}
@@ -158,10 +178,13 @@ const Cart = () => {
                         size={8}
                         quantity={qty}
                         setQuantity={(val) => updateQuantityui(item._id, val)}
+                        stock={product?.stock}
                       />
                     </div>
                     <div className="h-fit">
-                      <p className="text-2xl md:text-4xl text-lux">${itemPrice.toFixed(2)}</p>
+                      <p className="text-2xl md:text-4xl text-lux">
+                        ${itemPrice.toFixed(2)}
+                      </p>
                     </div>
                   </div>
 
@@ -195,7 +218,6 @@ const Cart = () => {
         </button>
       </div>
 
-
       <div className="w-full md:w-96  md:sticky md:top-0 md:h-screen md:overflow-y-auto border-t md:border-t-0 md:border-l border-hair bg-cream-light">
         <OrderSummary
           orderSummary={orderSummary}
@@ -204,6 +226,14 @@ const Cart = () => {
         />
       </div>
 
+<CartDialog
+outOfStockItems={outOfStockItems}
+showDialog={showDialog}
+setShowDialog={setShowDialog}
+handleOrder={handleOrder}
+cart={cart}
+/>
+    
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import { createContext, useContext, useState } from "react";
 import api from "@/lib/api";
 import { CART_KEY } from "@/hooks/carts/useCarts";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
-
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
@@ -14,18 +14,12 @@ export const AuthProvider = ({ children }) => {
   // !todo make a function to sync the cart from local to db when user logins
   const syncGuestCart = async () => {
     try {
-      console.log(1);
       const localCart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-      console.log(localCart.length, "local cart");
       if (localCart.length === 0) return;
-
-      console.log(2);
-      const response = await api.post("cart/sync", { items: localCart });
-      console.log(response.data, "response");
+      await api.post("cart/sync", { items: localCart });
       localStorage.removeItem(CART_KEY);
-      console.log(3);
     } catch (err) {
-      console.log(err.message);
+      console.error(err);
     }
   };
 
@@ -39,10 +33,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
       await syncGuestCart();
     } catch (error) {
-      // forward the real server message to the component
-      throw new Error(
-        error.response?.data?.message || error.message || "Registration failed",
-      );
+      throw error;
     }
   };
 
@@ -54,12 +45,9 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      await syncGuestCart(); // ← inside try, only runs on success
+      await syncGuestCart();
     } catch (error) {
-      // forward the real server message to the component
-      throw new Error(
-        error.response?.data?.message || error.message || "Invalid credentials",
-      );
+      throw error;
     }
   };
 
@@ -72,14 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        token,
-        LoginUser,
-        RegisterUser,
-        LogoutUser,
-        syncGuestCart,
-      }}
+      value={{ user, token, LoginUser, RegisterUser, LogoutUser, syncGuestCart }}
     >
       {children}
     </AuthContext.Provider>

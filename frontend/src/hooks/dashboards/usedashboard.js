@@ -16,8 +16,7 @@ export function usedashboard() {
                 const res = await dashboardService.getoverview();
                 setOverview(res.data);
             } catch (e) {
-                console.log(e);
-                toast.error(e.message);
+                toast.error(e.response?.data?.message || "Failed to fetch overview");
             }finally{
                 setLoading(false)
             }

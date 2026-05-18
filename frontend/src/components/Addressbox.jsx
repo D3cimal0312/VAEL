@@ -40,15 +40,10 @@ const Addressbox = ({ address, addType = "home", onSave }) => {
     form.setValues((prev) => ({ ...prev, province: e.target.value, district: "" }));
   };
 
-  const handleSubmit = async (values) => {
-    try {
-      await onSave(addType, values);
-      toast.success(`${addType} address saved!`);
-      close();
-    } catch (err) {
-      toast.error(err.message || "Failed to save address");
-    }
-  };
+const handleSubmit = async (values) => {
+  await onSave(addType, values);
+  close();
+};
 
   const inputClass =
     "w-full bg-cream-light border rounded-lg px-3 py-2 text-lux font-fair text-sm placeholder:text-lux/30 focus:outline-none transition-colors";

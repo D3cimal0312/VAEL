@@ -82,9 +82,7 @@ const OrderSummary = ({ orderSummary, onCheckout, ordering }) => {
           *Shipping cost is subject to change based on location and free on orders $799 and above
         </p>
       </div>
-
-      <div
-        onClick={!ordering ? onCheckout : undefined}
+<div onClick={!ordering ? () => onCheckout() : undefined}
         className={ordering ? "opacity-50 cursor-not-allowed" : ""}
       >
         <Animatebtn str={ordering ? "Placing Order..." : "Proceed to Checkout"} />

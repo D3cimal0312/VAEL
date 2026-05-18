@@ -60,25 +60,20 @@ const AdminOrders = () => {
   const clearFilters = () =>
     setFilters({ status: "", paymentStatus: "", q: "" });
   const refetch = () => setRefreshKey((k) => k + 1);
-
-  const startEdit = (order) => {
-    setEditingId(order._id);
-    setEditValues({ status: order.status, paymentStatus: order.paymentStatus });
-  };
-
-  const handleSave = async (id) => {
-    setSavingId(id);
-    try {
-      await orderService.updateOrderStatus(id, editValues.status);
-      await orderService.updatePaymentStatus(id, editValues.paymentStatus);
-      refetch();
-    } catch (e) {
-      console.error(e.message);
-    } finally {
-      setSavingId(null);
-      setEditingId(null);
-    }
-  };
+const handleSave = async (id) => {
+  setSavingId(id);
+  try {
+    await orderService.updateOrderStatus(id, editValues.status);
+    await orderService.updatePaymentStatus(id, editValues.paymentStatus);
+    toast.success("Order updated successfully");
+    refetch();
+  } catch (e) {
+    toast.error(e.response?.data?.message || "Failed to update order");
+  } finally {
+    setSavingId(null);
+    setEditingId(null);
+  }
+};
 
   return (
     <div className="bg-cream-light px-4 ">

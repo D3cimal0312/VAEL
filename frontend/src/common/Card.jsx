@@ -64,17 +64,30 @@ const Card = ({ products, limit = products.length, cols = 5 }) => {
                   </button>
                 </div>
 
-                <div
+                <button
                   onClick={() => handleQuickAdd(item)}
-                  className="group/bar absolute -bottom-1 left-0 w-full bg-ink text-white tracking-widest uppercase py-3 translate-y-full group-hover:translate-y-0 transition-all duration-300 hover:bg-lux overflow-hidden cursor-none "
+                  className={`group/bar absolute -bottom-1 left-0 w-full bg-ink text-white tracking-widest uppercase py-3 
+              ${item.stock !== 0? "translate-y-full group-hover:translate-y-0 transition-all duration-300 hover:bg-lux overflow-hidden cursor-none" :"cursor-not-allowed bg-gray-500"}
+                  }`}
+                  disabled={item.stock === 0}
                 >
-                  <div className="flex justify-center transition-all duration-300 group-hover/bar:translate-x-full group-hover/bar:opacity-0">
-                    <span className="text-[11px]">Add to Cart</span>
-                  </div>
-                  <div className="absolute inset-0 flex justify-center items-center -translate-x-full group-hover/bar:translate-x-0 transition-all duration-300">
-                    <ShoppingCart size={22} />
-                  </div>
-                </div>
+                  {item.stock !== 0 && (
+                    <>
+                      <div className="flex justify-center transition-all duration-300 group-hover/bar:translate-x-full group-hover/bar:opacity-0">
+                        <span className="text-lg">Add to Cart</span>
+                      </div>
+                      <div className="absolute inset-0 flex justify-center items-center -translate-x-full group-hover/bar:translate-x-0 transition-all duration-300">
+                        <ShoppingCart size={22} />
+                      </div>
+                    </>
+                  )}
+
+                  {item.stock === 0 && (
+                    <div className="flex justify-center transition-all duration-300">
+                      <span className="text-lg">Out of Stock</span>
+                    </div>
+                  )}
+                </button>
               </div>
 
               <Link to={`/products/${item.slug}`}>

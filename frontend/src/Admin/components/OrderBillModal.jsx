@@ -21,6 +21,7 @@ const OrderBillModal = ({ opened, close, order }) => {
       link.href = dataUrl;
       link.click();
     } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to download bill");
       console.error(err);
     }
   };

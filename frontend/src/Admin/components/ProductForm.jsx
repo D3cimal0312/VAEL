@@ -229,7 +229,7 @@ const ProductForm = () => {
       refetch();
     } catch (err) {
       console.error("Product submission error:", err);
-      toast.error(err.message);
+      toast.error(err.response?.data?.message || "Failed to submit product");
     }
   };
 

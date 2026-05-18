@@ -8,7 +8,7 @@ export const toggleFav = async (req, res) => {
 
     const product = await Products.exists({ _id: productId });
     if (!product) {
-      return res.status(404).json({ message: "product not found or not published" });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     const list = await Fav.findOne({ user: userId });
@@ -31,7 +31,7 @@ export const toggleFav = async (req, res) => {
     });
   } catch (err) {
     console.error("[toggleFav]", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -42,7 +42,6 @@ export const getUserFavs = async (req, res) => {
     const list = await Fav.findOne({ user: userId }).populate({
       path: "items.product",
       select: "name images price rating slug stock",
-
     });
 
     if (!list) {
@@ -55,7 +54,7 @@ export const getUserFavs = async (req, res) => {
     });
   } catch (err) {
     console.error("geting UserFavs", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ message: "Failed to fetch favourites" });
   }
 };
 
@@ -67,7 +66,8 @@ export const isFav = async (req, res) => {
     });
     return res.json({ isFav: !!exists });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -82,11 +82,12 @@ export const clearFavs = async (req, res) => {
     );
 
     if (!list) {
-      return res.status(404).json({ message: "Unable to find the fav list" });
+      return res.status(404).json({ message: "Favourites list not found" });
     }
 
     res.json({ message: "Successfully cleared fav list", items: [], count: 0 });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to clear favourites" });
   }
 };

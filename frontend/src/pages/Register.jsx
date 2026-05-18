@@ -83,9 +83,9 @@ const Register = () => {
       });
       toast.success("Registered successfully!");
       navigate("/");
-    } catch (err) {
-      console.log(err.message, "error in toast");
-      toast.error(err.message, { position: "top-left" });
+    } catch (error) {
+      console.log(error.message, "error in toast");
+      toast.error(error.response?.data?.message || "Something went wrong",{ position: "top-left" });
     }
   };
 
@@ -94,9 +94,9 @@ const Register = () => {
       await LoginUser(values);
       toast.success("Logged in successfully!");
       navigate("/");
-    } catch (err) {
+    } catch (error) {
       console.log(err.message, "error in toast");
-      toast.error(err.message, { position: "top-left" });
+     toast.error(error.response?.data?.message || "Something went wrong", { position: "top-left" });
     }
   };
 

@@ -16,7 +16,7 @@ export function useAdminProduct(id) {
         const data = await productService.getById(id);
         setProduct(data);
       } catch (e) {
-        toast.error(e.message);
+        toast.error(e.response?.data?.message || "Failed to fetch product");
       } finally {
         setLoading(false);
       }

@@ -5,13 +5,18 @@ export const createCategory = async (req, res) => {
   try {
     const category = await Category.create(req.body);
     if (!category)
-      return res.status(404).json({
-        message: "category creation issue",
-      });
+      return res.status(404).json({ message: "Category creation failed" });
     res.status(200).json({ data: category });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message });
+    }
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "Category already exists" });
+    }
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -24,20 +29,26 @@ export const updateCategory = async (req, res) => {
     });
 
     if (!category)
-      return res.status(404).json({
-        message: "category not found",
-      });
+      return res.status(404).json({ message: "Category not found" });
     res.status(200).json({ data: category });
   } catch (err) {
-    res.status(500).json({ message: err.messsage });
+    console.error(err);
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message });
+    }
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "Category already exists" });
+    }
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 // !getting all category
 export const getAllCategory = async (req, res) => {
   try {
-    const { q,page=1,limit=10 } = req.query;
-    const skip = (page-1)*limit;
+    const { q, page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
     const filter = q
       ? {
           $or: [
@@ -49,9 +60,11 @@ export const getAllCategory = async (req, res) => {
 
     const sortDirection = req.query.order === "desc" ? -1 : 1;
 
-    const categories = await Category.find(filter).skip(skip).limit(Number(limit)).sort({
-      name: sortDirection,
-    });
+    const categories = await Category.find(filter)
+      .skip(skip)
+      .limit(Number(limit))
+      .sort({ name: sortDirection });
+
     const totalCount = await Category.countDocuments();
     const totalPage = Math.ceil(totalCount / Number(limit));
 
@@ -60,41 +73,39 @@ export const getAllCategory = async (req, res) => {
     if (categories.length === 0)
       return res.status(200).json({ message: "no data found" });
 
-    res.status(200).json({ data: categories,totalPage:totalPage, count: totalCount,page:Number(page) });
+    res.status(200).json({ data: categories, totalPage, count: totalCount, page: Number(page) });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch categories" });
   }
 };
 
 // !getting a single category
-
 export const getCategoryById = async (req, res) => {
   try {
     const singlecategory = await Category.findById(req.params.id);
 
     if (!singlecategory) {
-      return res
-        .status(404)
-        .json({ message: "unable to find the category by id" });
+      return res.status(404).json({ message: "Category not found" });
     }
 
     res.status(200).json({ data: singlecategory });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch category" });
   }
 };
-
-//
 
 export const simpleCategories = async (req, res) => {
   try {
     const categories = await Category.find({}).select("name isActive");
 
     if (!categories)
-      return res.status(404).json({ message: "no data found" });
+      return res.status(404).json({ message: "No categories found" });
 
     res.status(200).json({ data: categories });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch categories" });
   }
 };

@@ -77,7 +77,7 @@ const CategoryForm = () => {
       form.reset();
       refetch();
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.message || "Failed to create/update category");
     }
   };
 

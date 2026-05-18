@@ -10,7 +10,6 @@ export const AddressProvider = ({ children }) => {
   const [selectedId, setSelectedId] = useState("home");
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
@@ -18,8 +17,7 @@ export const AddressProvider = ({ children }) => {
         setHomeAddress(data?.home || {});
         setWorkAddress(data?.work || {});
       } catch (e) {
-
-        console.error("Failed to fetch addresses", e);
+        toast.error(e.response?.data?.message || "Failed to fetch addresses");
       } finally {
         setLoading(false);
       }
@@ -28,18 +26,21 @@ export const AddressProvider = ({ children }) => {
     fetchAddresses();
   }, []);
 
-
   const saveAddress = async (type, newValues) => {
-    await userService.updateAddress(type, newValues); 
-    if (type === "home") setHomeAddress(newValues);
-    if (type === "work") setWorkAddress(newValues);
+    try {
+      await userService.updateAddress(type, newValues);
+      if (type === "home") setHomeAddress(newValues);
+      if (type === "work") setWorkAddress(newValues);
+      toast.success("Address saved successfully");
+    } catch (e) {
+      toast.error(e.response?.data?.message || "Failed to save address");
+    }
   };
-
 
   const getAddressSnapshot = () => {
     if (selectedId === "home") return { ...homeAddress };
     if (selectedId === "work") return { ...workAddress };
-    return { ...homeAddress }; 
+    return { ...homeAddress };
   };
 
   const hasHome = homeAddress && Object.keys(homeAddress).length > 0 && homeAddress.district;

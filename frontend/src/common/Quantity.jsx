@@ -2,7 +2,9 @@ import React from 'react'
 import { Minus, Plus } from "lucide-react";
 
 
-const Quantity = ({size=12 ,quantity, setQuantity }) => {
+const Quantity = ({size=12 ,quantity, setQuantity,stock }) => {
+
+  console.log(stock);
 
 
 
@@ -13,7 +15,7 @@ const Quantity = ({size=12 ,quantity, setQuantity }) => {
         <div className="flex gap " >
             <div
               onClick={() => {
-                quantity > 1 ? setQuantity(quantity - 1) : "";
+                quantity > 1 ? setQuantity(quantity - 1) : ""
               }}
               className={`bg-black  active:bg-lux  text-white font-bold   text-4xl h-${size} w-${size}  flex justify-center items-center`}
             >
@@ -25,7 +27,7 @@ const Quantity = ({size=12 ,quantity, setQuantity }) => {
             </div>
             <div
               onClick={() => {
-                setQuantity(quantity + 1);
+                (stock>quantity)? setQuantity(quantity + 1):""
               }}
               className={`bg-black active:bg-lux  text-white font-bold   text-4xl h-${size} w-${size} flex justify-center items-center `}
             >
