@@ -5,6 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import StatusBadge from "../common/StatusBadge";
 import OrderFilter from "../components/OrderFilter";
 import OrderBillModal from "../components/OrderBillModal";
+import toast from "react-hot-toast";
 import Heading from "@/common/Heading";
 
 import Paginationui from "@/common/Paginationui";
@@ -30,6 +31,7 @@ const AdminOrders = () => {
   });
   const [refreshKey, setRefreshKey] = useState(0);
   const [editingId, setEditingId] = useState(null);
+  const [editingOrder, setEditingOrder] = useState(null);
   const [editValues, setEditValues] = useState({});
   const [savingId, setSavingId] = useState(null);
   const [currentOrder, setCurrentOrder] = useState(null);
@@ -60,20 +62,33 @@ const AdminOrders = () => {
   const clearFilters = () =>
     setFilters({ status: "", paymentStatus: "", q: "" });
   const refetch = () => setRefreshKey((k) => k + 1);
-const handleSave = async (id) => {
-  setSavingId(id);
-  try {
-    await orderService.updateOrderStatus(id, editValues.status);
-    await orderService.updatePaymentStatus(id, editValues.paymentStatus);
-    toast.success("Order updated successfully");
-    refetch();
-  } catch (e) {
-    toast.error(e.response?.data?.message || "Failed to update order");
-  } finally {
-    setSavingId(null);
-    setEditingId(null);
-  }
-};
+
+  const startEdit = (order) => {
+    setEditingId(order._id);
+    setEditingOrder(order);
+    setEditValues({ status: order.status, paymentStatus: order.paymentStatus });
+  };
+
+  const handleSave = async (id) => {
+    setSavingId(id);
+    try {
+      if (editValues.status !== editingOrder.status) {
+        await orderService.updateOrderStatus(id, editValues.status);
+      }
+      if (editValues.paymentStatus !== editingOrder.paymentStatus) {
+        await orderService.updatePaymentStatus(id, editValues.paymentStatus);
+      }
+
+      toast.success("Order updated successfully");
+      refetch();
+    } catch (e) {
+      toast.error(e.response?.data?.message || "Failed to update order");
+    } finally {
+      setSavingId(null);
+      setEditingId(null);
+      setEditingOrder(null);
+    }
+  };
 
   return (
     <div className="bg-cream-light px-4 ">
@@ -172,11 +187,21 @@ const handleSave = async (id) => {
                           onClick={(e) => e.stopPropagation()}
                           className="border border-hair rounded px-2 py-1 text-xs text-ink bg-white"
                         >
-                          {STATUS_OPTIONS.map((s) => (
-                            <option key={s} value={s}>
-                              {capitalize(s)}
+                          {order.status !== "cancelled" ? (
+                            STATUS_OPTIONS.map((s) => (
+                              <option key={s} value={s}>
+                                {capitalize(s)}
+                              </option>
+                            ))
+                          ) : (
+                            <option
+                              key={"cancelled"}
+                              value={"cancelled"}
+                              disabled
+                            >
+                              {"cancelled"}
                             </option>
-                          ))}
+                          )}
                         </select>
                       ) : (
                         <StatusBadge value={order.status} />

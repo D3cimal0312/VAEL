@@ -79,11 +79,11 @@ const Profile = () => {
         {/* Stat cards */}
         {stats.map(({ icon: Icon, label, value }) => (
           <div key={label} className="bg-card rounded-2xl p-5 flex flex-col gap-2">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
               <p className="text-lg uppercase  text-gray-400">{label}</p>
-              <Icon size={16} className="text-lux opacity-60" />
+              <Icon size={24} className="text-lux opacity-60" />
             </div>
-            <p className="font-fair text-4xl font-medium text-lux leading-none">{value}</p>
+            <p className="font-fair text-4xl font-medium text-lux text-center leading-none">{value}</p>
           </div>
         ))}
 

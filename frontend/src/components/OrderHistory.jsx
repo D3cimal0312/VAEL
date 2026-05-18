@@ -7,7 +7,11 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  PackageX,
 } from "lucide-react";
+
+import { orderService } from "@/services/orderService";
+import toast from "react-hot-toast";
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleDateString("en-US", {
@@ -60,6 +64,16 @@ const getPaymentStatusColor = (status) => {
 
 const OrderHistory = ({ orders, count, loading }) => {
   const [expandedOrder, setExpandedOrder] = useState(null);
+
+  
+  console.log(orders,"order from orderhistory");  const cancelOrder=async(id,status)=>{
+    try {
+      await orderService.cancelOrder(id,status)
+      toast.success("Order cancelled successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to cancel order");
+    }
+  }
 
   if (loading) {
     return (
@@ -288,6 +302,7 @@ const OrderHistory = ({ orders, count, loading }) => {
                   </div>
 
                   {/* Shipping Address */}
+                  <div className="flex justify-between flex-wrap">
                   <div>
                     <h3 className="text-lux font-fair font-semibold mb-2 text-sm">
                       Shipping Address
@@ -309,6 +324,20 @@ const OrderHistory = ({ orders, count, loading }) => {
                         Ph: {order.shippingAddress.phone}
                       </p>
                     </div>
+                  </div>
+                  {
+                    order.status!=="cancelled" && 
+                  
+                    <div className="self-end">
+                      <button
+                      onClick={()=>cancelOrder(order._id,order.status)}
+                          className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-red-200 bg-transparent text-red-600 text-[13.5px] cursor-pointer transition-colors duration-100 hover:bg-red-50 hover:border-red-200 font-[inherit]"
+        >
+          <PackageX size={24} className="text-red-600" />
+                        Cancel order
+                      </button>
+                    </div>
+        }
                   </div>
                 </div>
               )}

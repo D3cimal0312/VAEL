@@ -1,12 +1,11 @@
-import api from '../lib/api';
+import api from "../lib/api";
 
 export const productService = {
-
   // get all products with filters
   async getAll(filters = {}) {
-    const res = await api.get('/products', {
+    const res = await api.get("/products", {
       params: Object.fromEntries(
-        Object.entries(filters).filter(([, v]) => v !== '')
+        Object.entries(filters).filter(([, v]) => v !== ""),
       ),
     });
     // console.log(res.data, "res data")
@@ -27,7 +26,7 @@ export const productService = {
 
   //  create
   async create(formData) {
-    const res = await api.post('/products/addproducts', formData);
+    const res = await api.post("/products/addproducts", formData);
     return res.data.data;
   },
 
@@ -41,5 +40,4 @@ export const productService = {
   async delete(id) {
     await api.delete(`/products/${id}`);
   },
-
 };

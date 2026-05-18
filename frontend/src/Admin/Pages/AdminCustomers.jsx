@@ -3,12 +3,13 @@ import { useAdminUsers } from "@/hooks/users/useAdminUsers";
 import { userService } from "@/services/userService";
 import UsersFilter from "../components/UsersFilter";
 import Heading from "@/common/Heading";
+import toast from "react-hot-toast";
 
 import Paginationui from "@/common/Paginationui";
 const AdminCustomers = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [filter, setFilter] = useState({
-    role:"",
+    role: "",
     q: "",
   });
   const updateFilter = (key, value) => {
@@ -20,35 +21,38 @@ const AdminCustomers = () => {
       q: "",
     });
   };
-  const { users, loading,
-    count,totalPage,page,setPage } = useAdminUsers(filter, refreshKey);
+  const { users, loading, count, totalPage, page, setPage } = useAdminUsers(
+    filter,
+    refreshKey,
+  );
 
-        const handlePageChange = (newPage) => {
-  setPage(newPage);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const refetch = () => setRefreshKey((k) => k + 1);
   const [editingId, setEditingId] = useState("");
   const [editValues, setEditValues] = useState({});
   console.log(users);
 
-const handleSave = async (id) => {
-  try {
-    if (id) {
-      const data = {
-        role: editValues.role,
-        isActive: editValues.isActive,
-      };
-      await userService.update(id, data);
-      toast.success("User updated successfully");
-      refetch();
+  const handleSave = async (id) => {
+    try {
+      if (id) {
+        const data = {
+          role: editValues.role,
+          isActive: editValues.isActive,
+        };
+        await userService.update(id, data);
+        toast.success("User updated successfully");
+        refetch();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update user");
     }
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Failed to update user");
-  }
-  setEditingId(null);
-};
+
+    setEditingId(null);
+  };
 
   const tableheadClass =
     "border border-hair px-4 py-2 text-left text-sm font-semibold";
@@ -56,9 +60,8 @@ const handleSave = async (id) => {
     "border border-hair rounded-lg px-3 py-2 text-sm text-ink bg-white focus:outline-none focus:ring-1 focus:ring-lux";
   return (
     <div className="overflow-x-auto bg-cream-light p-6 font-fair">
-      
-        <Heading mainheading={"Customers"} subheading={"Manage your customers"} />
-      
+      <Heading mainheading={"Customers"} subheading={"Manage your customers"} />
+
       {/* <div className="flex  justify-between mb-4">
         <div className="flex items-center gap-2">
           <label className="text-xs font-semibold text-hair mb-1 block">
@@ -79,7 +82,11 @@ const handleSave = async (id) => {
           Clear All
         </button>
       </div> */}
-            <UsersFilter filter={filter} updateFilter={updateFilter} clearFilters={clearFilters} />
+      <UsersFilter
+        filter={filter}
+        updateFilter={updateFilter}
+        clearFilters={clearFilters}
+      />
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold text-ink">Users</h2>
         <button
@@ -251,12 +258,11 @@ const handleSave = async (id) => {
         )}
       </table>
 
-<Paginationui
-
-totalPage={totalPage}
-page={page}
-onPageChange={handlePageChange}
-/>
+      <Paginationui
+        totalPage={totalPage}
+        page={page}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

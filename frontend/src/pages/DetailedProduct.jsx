@@ -175,9 +175,11 @@ const DetailedProduct = () => {
 
             <div className="flex gap-4 items-center">
               <p className="tracking-wider font-serif text-xl">QTY:</p>
-              <Quantity quantity={quantity} setQuantity={setQuantity}
-                        stock={product?.stock}
-               />
+              <Quantity
+                quantity={quantity}
+                setQuantity={setQuantity}
+                stock={product?.stock}
+              />
             </div>
           </div>
 

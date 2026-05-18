@@ -38,9 +38,9 @@ const AdminNav = () => {
             <LayoutDashboard size={17} className="text-cream" strokeWidth={1.8} />
           </div>
           <div>
-            <p className=" font-medium text-hair-dark leading-tight m-0">
+            <div className=" font-medium text-hair-dark leading-tight m-0">
               <Logo></Logo>
-            </p>
+            </div>
             <p className="text-lg text-hair uppercase tracking-widest m-0">
               Admin Panel
             </p>

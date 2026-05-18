@@ -18,25 +18,37 @@ export const createOrder = async (req, res) => {
     for (const item of items) {
       const product = await Product.findById(item.productId);
       if (!product || product.stock === 0) {
-        outOfStockItems.push({ productId: item.productId, name: product?.name || "Unknown" });
+        outOfStockItems.push({
+          productId: item.productId,
+          name: product?.name || "Unknown",
+        });
       }
     }
 
     if (outOfStockItems.length > 0 && !skipOutOfStock) {
       return res.status(400).json({
         message: "Some items are out of stock",
-        outOfStockItems
+        outOfStockItems,
       });
     }
 
     const validItems = skipOutOfStock
-      ? items.filter(item => !outOfStockItems.find(o => o.productId === item.productId))
+      ? items.filter(
+          (item) =>
+            !outOfStockItems.find((o) => o.productId === item.productId),
+        )
       : items;
 
     if (validItems.length === 0) {
       return res.status(400).json({
         message: "All items in your cart are out of stock",
-        outOfStockItems
+        outOfStockItems,
+      });
+    }
+
+    for (const items of validItems) {
+      await Product.findByIdAndUpdate(items.productId, {
+        $inc: { stock: -items.quantity },
       });
     }
 
@@ -112,7 +124,9 @@ export const getMyOrders = async (req, res) => {
       }
     });
 
-    res.status(200).json({ count: orders.length, data: orders, spent: totalspent });
+    res
+      .status(200)
+      .json({ count: orders.length, data: orders, spent: totalspent });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch orders" });
@@ -128,16 +142,28 @@ export const updateOrderStatus = async (req, res) => {
     if (!order) return res.status(404).json({ message: "Order not found" });
     console.log(order.status);
     if (order.status === status)
-      return res.status(400).json({ message: "Order is already in this status" });
+      return res
+        .status(400)
+        .json({ message: "Order is already in this status" });
+
+        if(status==="cancelled"){
+          return res.status(400).json({message:"Order cannot be changed once it has been cancelled"})
+        }
+
 
     order.status = status;
 
     // write-once — only set if not already set
     if (status === "delivered" && !order.deliveredAt)
       order.deliveredAt = new Date();
-    if (status === "cancelled" && !order.cancelledAt)
+    if (status === "cancelled" && !order.cancelledAt) {
       order.cancelledAt = new Date();
-
+      order.items.forEach(async (item) => {
+        await Product.findByIdAndUpdate(item.productId, {
+          $inc: { stock: +item.quantity },
+        });
+      });
+    }
     await order.save();
     res.status(200).json({ data: order });
   } catch (err) {
@@ -154,7 +180,9 @@ export const updatePaymentStatus = async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: "Order not found" });
     if (order.paymentStatus === paymentStatus)
-      return res.status(400).json({ message: "Order is already in this status" });
+      return res
+        .status(400)
+        .json({ message: "Order is already in this status" });
 
     order.paymentStatus = paymentStatus;
 
@@ -187,15 +215,12 @@ export const cancelOrder = async (req, res) => {
 
     order.status = "cancelled";
 
-    // write-once
     if (!order.cancelledAt) order.cancelledAt = new Date();
 
-    // push to history
-    order.statusHistory.push({
-      status: "cancelled",
-      changedAt: new Date(),
-      changedBy: req.user?.id,
-      note: "Cancelled by user",
+    order.items.forEach(async (item) => {
+      await Product.findByIdAndUpdate(item.productId, {
+        $inc: { stock: +item.quantity },
+      });
     });
 
     await order.save();

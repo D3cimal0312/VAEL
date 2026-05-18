@@ -38,11 +38,6 @@ const Cart = () => {
     }
   }, [cart]);
 
-  const updateQuantityui = async (id, value) => {
-    setQuantities((prev) => ({ ...prev, [id]: value }));
-    updateQuantity(id, value);
-  };
-
   const subPrice = formatPrice(
     cart?.reduce(
       (sum, item) =>
@@ -62,6 +57,12 @@ const Cart = () => {
     { label: "Shipping", value: shipping },
     { label: "Total", value: totalPrice },
   ];
+
+  const updateQuantityui = async (id, value) => {
+    setQuantities((prev) => ({ ...prev, [id]: value }));
+    await delay(2000);
+    updateQuantity(id, value);
+  };
 
   const handleOrder = async (skipOutOfStock = false) => {
     if (!cart || count === 0) {
@@ -115,7 +116,7 @@ const Cart = () => {
         setShowDialog(true);
         return;
       }
-toast.error(e.response?.data?.message || "Failed to place order");
+      toast.error(e.response?.data?.message || "Failed to place order");
     } finally {
       setOrdering(false);
     }
@@ -226,14 +227,13 @@ toast.error(e.response?.data?.message || "Failed to place order");
         />
       </div>
 
-<CartDialog
-outOfStockItems={outOfStockItems}
-showDialog={showDialog}
-setShowDialog={setShowDialog}
-handleOrder={handleOrder}
-cart={cart}
-/>
-    
+      <CartDialog
+        outOfStockItems={outOfStockItems}
+        showDialog={showDialog}
+        setShowDialog={setShowDialog}
+        handleOrder={handleOrder}
+        cart={cart}
+      />
     </div>
   );
 };
