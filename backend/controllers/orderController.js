@@ -146,7 +146,7 @@ export const updateOrderStatus = async (req, res) => {
         .status(400)
         .json({ message: "Order is already in this status" });
 
-        if(status==="cancelled"){
+        if(order.status==="cancelled"){
           return res.status(400).json({message:"Order cannot be changed once it has been cancelled"})
         }
 
