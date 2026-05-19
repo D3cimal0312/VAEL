@@ -23,6 +23,8 @@ import AdminProducts from "./Admin/Pages/AdminProducts";
 import AdminCustomers from "./Admin/Pages/AdminCustomers";
 import AdminOrders from "./Admin/Pages/AdminOrders";
 import AdminCategories from "./Admin/Pages/AdminCategories";
+import AdminInquiry from "./Admin/Pages/AdminInquiry";
+import Unsubscribe from "./pages/Unsubscribe";
 
 // !guard imports
 import AdminRoute from "./guards/AdminRoute";
@@ -97,7 +99,11 @@ function App() {
           <Route path="orders" element={<AdminOrders />} />
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="categories" element={<AdminCategories />} />
+          <Route path="inquiries" element={<AdminInquiry />} />
         </Route>
+
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
+
       </Routes>
     </div>
   );

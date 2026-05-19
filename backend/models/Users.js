@@ -41,6 +41,8 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^[\w.-]+@[\w.-]+\.\w{2,}$/, "Invalid email address"],
     },
+    unsubscribed: { type: Boolean, default: false },
+
     password: { type: String, required: true, select: false },
     role: { type: String, enum: ["customer", "admin"], default: "customer" },
 
@@ -48,7 +50,6 @@ const userSchema = new mongoose.Schema(
       home: { type: addressSchema, default: {} },
       work: { type: addressSchema, default: {} },
     },
-
 
     // !this is used so that admin can removed any unwanted users or not let anyone login
     isActive: { type: Boolean, required: true, default: true },

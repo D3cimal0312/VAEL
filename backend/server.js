@@ -18,6 +18,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
+import emailRoutes from "./routes/emailRoutes.js"; 
 import cors from "cors";
 
 const app = express();
@@ -54,6 +55,9 @@ app.use("/order", orderRoutes);
 
 app.use("/dashboard",dashboardRoutes)
 // !for front end safeguard
+
+// email routes protection
+app.use("/email",emailRoutes)
 
 // Connect to MongoDB then start server
 app.listen(process.env.PORT || 5000, () => {

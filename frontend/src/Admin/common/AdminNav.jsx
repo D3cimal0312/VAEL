@@ -1,9 +1,16 @@
 import React from "react";
 import Logo from "@/common/Logo";
 import { useAuth } from "@/context/AuthContext";
-import { LayoutDashboard, Package, ShoppingBag, Users, Tag, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingBag,
+  Users,
+  Tag,
+  LogOut,
+  Mail,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
-
 
 const mainlink = "/admin";
 
@@ -21,6 +28,7 @@ const navSections = [
     label: "Store",
     items: [
       { to: `${mainlink}/categories`, label: "Categories", icon: Tag },
+      { to: `${mainlink}/inquiries`, label: "Inquiry", icon: Mail },
     ],
   },
 ];
@@ -30,12 +38,15 @@ const AdminNav = () => {
 
   return (
     <div className="h-full flex flex-col bg-cream-light border-r border-offwhite">
-
       {/* Brand */}
       <NavLink to={mainlink} className="no-underline">
         <div className="flex items-center gap-3 px-5 py-[22px] border-b border-offwhite">
           <div className="w-[34px] h-[34px] rounded-lg bg-lux flex items-center justify-center shrink-0">
-            <LayoutDashboard size={17} className="text-cream" strokeWidth={1.8} />
+            <LayoutDashboard
+              size={17}
+              className="text-cream"
+              strokeWidth={1.8}
+            />
           </div>
           <div>
             <div className=" font-medium text-hair-dark leading-tight m-0">
@@ -57,12 +68,7 @@ const AdminNav = () => {
             </p>
 
             {section.items.map(({ to, label, icon: Icon, end }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={end}
-                className="no-underline"
-              >
+              <NavLink key={to} to={to} end={end} className="no-underline">
                 {({ isActive }) => (
                   <div
                     className={`relative flex items-center gap-[10px] px-5 py-2 cursor-pointer transition-colors duration-100
@@ -108,6 +114,3 @@ const AdminNav = () => {
 };
 
 export default AdminNav;
-
-
-

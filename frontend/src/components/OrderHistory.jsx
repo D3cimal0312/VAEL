@@ -316,17 +316,14 @@ const OrderHistory = ({ orders, count, loading }) => {
                         {order.shippingAddress.district},{" "}
                         {order.shippingAddress.province}
                       </p>
-                      <p>
-                        {order.shippingAddress.zipcode},{" "}
-                        {order.shippingAddress.country}
-                      </p>
+
                       <p className="font-semibold text-lux">
                         Ph: {order.shippingAddress.phone}
                       </p>
                     </div>
                   </div>
                   {
-                    order.status!=="cancelled" && 
+                    (order.status==="pending" || order.status==="confirmed") && 
                   
                     <div className="self-end">
                       <button

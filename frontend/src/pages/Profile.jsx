@@ -7,17 +7,32 @@ import useFavourite from "@/hooks/favourites/useFavourites";
 import { useOrders } from "@/hooks/orders/useOrders";
 import OrderHistory from "@/components/OrderHistory";
 import Addressbox from "@/components/Addressbox";
-import { LogOut, Package, Heart, Wallet, Mail, CalendarDays } from "lucide-react";
+import {
+  LogOut,
+  Package,
+  Heart,
+  Wallet,
+  Mail,
+  CalendarDays,
+} from "lucide-react";
 
 const Profile = () => {
-
   const { LogoutUser } = useAuth();
   const { count, items, loadings } = useFavourite();
-  const { order, count: orderCount, loading: orderLoadings,spent } = useOrders();
+  const {
+    order,
+    count: orderCount,
+    loading: orderLoadings,
+    spent,
+  } = useOrders();
   const { userDetails, loading } = useUser();
 
-
-  const { homeAddress, workAddress, saveAddress } = useAddress();
+  const {
+    homeAddress,
+    workAddress,
+    saveAddress,
+    loading: addressLoading,
+  } = useAddress();
 
   const greeting = () => {
     const hour = new Date().getHours();
@@ -29,14 +44,13 @@ const Profile = () => {
   if (loading) return <h1>Loading...</h1>;
 
   const stats = [
-    { icon: Package, label: "Orders",     value: orderCount },
-    { icon: Heart,   label: "Favourites", value: count },
-    { icon: Wallet,  label: "Spent",      value: `$. ${spent}` },
+    { icon: Package, label: "Orders", value: orderCount },
+    { icon: Heart, label: "Favourites", value: count },
+    { icon: Wallet, label: "Spent", value: `$. ${spent}` },
   ];
 
   return (
     <div className="min-h-screen bg-cream-light font-fair px-6 md:px-12 py-10 flex flex-col gap-8">
-
       {/* Hero banner */}
       <div className="relative rounded-2xl overflow-hidden bg-[url('/main.png')] bg-cover bg-center h-48 md:h-56">
         <div className="absolute inset-0 bg-black/60" />
@@ -57,7 +71,6 @@ const Profile = () => {
       </div>
 
       <div className="flex justify-between gap-4">
-
         {/* Member info */}
         <div className="md:col-span-1 bg-card rounded-2xl p-5 flex flex-col gap-3">
           <p className="text-lg uppercase  text-gray-400">Account</p>
@@ -78,26 +91,44 @@ const Profile = () => {
 
         {/* Stat cards */}
         {stats.map(({ icon: Icon, label, value }) => (
-          <div key={label} className="bg-card rounded-2xl p-5 flex flex-col gap-2">
+          <div
+            key={label}
+            className="bg-card rounded-2xl p-5 flex flex-col gap-2"
+          >
             <div className="flex items-center gap-8">
               <p className="text-lg uppercase  text-gray-400">{label}</p>
               <Icon size={24} className="text-lux opacity-60" />
             </div>
-            <p className="font-fair text-4xl font-medium text-lux text-center leading-none">{value}</p>
+            <p className="font-fair text-4xl font-medium text-lux text-center leading-none">
+              {value}
+            </p>
           </div>
         ))}
 
-   
         <div>
           <p className="text-lg uppercase  text-gray-400 mb-3">
             Saved addresses
           </p>
-          <div className="flex flex-wrap gap-5">
-            <Addressbox address={homeAddress} addType="home" onSave={saveAddress} />
-            <Addressbox address={workAddress} addType="work" onSave={saveAddress} />
-          </div>
+          {addressLoading ? (
+            <div className="flex gap-5">
+              <div className="w-48 h-24 rounded-xl bg-offwhite animate-pulse" />
+              <div className="w-48 h-24 rounded-xl bg-offwhite animate-pulse" />
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-5">
+              <Addressbox
+                address={homeAddress}
+                addType="home"
+                onSave={saveAddress}
+              />
+              <Addressbox
+                address={workAddress}
+                addType="work"
+                onSave={saveAddress}
+              />
+            </div>
+          )}
         </div>
-
       </div>
 
       {/* Activity */}
@@ -106,10 +137,13 @@ const Profile = () => {
           <Favourites items={items} loading={loadings} count={count} />
         </div>
         <div data-aos="fade-up" data-aos-delay="200">
-          <OrderHistory orders={order} loading={orderLoadings} count={orderCount} />
+          <OrderHistory
+            orders={order}
+            loading={orderLoadings}
+            count={orderCount}
+          />
         </div>
       </div>
-
     </div>
   );
 };
