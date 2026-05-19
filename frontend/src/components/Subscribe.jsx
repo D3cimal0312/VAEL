@@ -1,47 +1,69 @@
-import React from 'react'
-import Heading from '../common/Heading'
-import Backgroundtag from './Backgroundtag'
+import React from "react";
+import Heading from "../common/Heading";
+import Backgroundtag from "./Backgroundtag";
+import toast from "react-hot-toast";
+import emailService from "@/services/emailService";
+import { useState } from "react";
 const Subscribe = () => {
-  return ( 
-    <div className='py-24 text-center bg-cream-light relative overflow-hidden'>
-      
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-      <Backgroundtag tag='VAEL'/>
+  const handleSubscribe = async () => {
+    if (!email.trim()) return toast.error("Please enter your email.");
+    setLoading(true);
+    try {
+      const res = await emailService.subscribe(email);
+      toast.success(res.message);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to subscribe");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      <div className='relative z-10 flex flex-col gap-8'>
+  return (
+    <div className="py-24 text-center bg-cream-light relative overflow-hidden">
+      <Backgroundtag tag="VAEL" />
+
+      <div className="relative z-10 flex flex-col gap-8">
         <div>
-          <Heading 
-            subheading={"stay in the loop"} 
-            mainheading={"The Edit,"} 
+          <Heading
+            subheading={"stay in the loop"}
+            mainheading={"The Edit,"}
             termheading={"In Your Inbox"}
           />
         </div>
 
-        <p className='text-hair text-xl'>
-          Get weekly notes, get notified on new drops, and 15% off on your first order when you join
+        <p className="text-hair text-xl">
+          Get weekly notes, get notified on new drops, and 15% off on your first
+          order when you join
         </p>
-    
+
         <div>
-          <input
+         <input
             type="email"
             placeholder='Your Email Address'
             name='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
             className='px-6 border-2 border-r-0 py-4 md:w-100 outline-none focus:outline-none focus:ring-0 focus:border-black rounded-none'
           />
-          <button className='px-8 border-2 outline-none border-black py-4 bg-black text-cream-light font-bold tracking-wider hover:bg-lux hover:border-lux transition-all duration-200 ease-linear'>
-            SUBSCRIBE
+          <button
+            onClick={handleSubscribe}
+            disabled={loading}
+            className="px-8 border-2 outline-none border-black py-4 bg-black text-cream-light font-bold tracking-wider hover:bg-lux hover:border-lux transition-all duration-200 ease-linear disabled:opacity-50"
+          >
+            {loading ? "SUBSCRIBING…" : "SUBSCRIBE"}
           </button>
         </div>
 
-        <p className='text-hair text-xl'>
-          No spam ever, <a href="https://mail.google.com/mail/u/0/#search/vael" target="_blank">
-            <span className='linked underline'>Unsubscribe anytime</span>
-          </a>
+        <p className="text-hair text-xl">
+          No spam ever, unsubscribe anytime via the link in any email we send.
         </p>
       </div>
-
     </div>
-  ) 
-}
+  );
+};
 
-export default Subscribe
+export default Subscribe;

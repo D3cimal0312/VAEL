@@ -100,3 +100,40 @@ export const unsubscribe = async (req, res) => {
     return res.status(500).json({ error: "Failed to unsubscribe." });
   }
 };
+
+export const subscribe = async (req, res) => {
+  const { email } = req.body;
+
+  //   console.log(req.user )
+  //   console.log(email)
+
+  if (!email?.trim() || !email) {
+    return res.status(400).json({ error: "Email is required." });
+  }
+
+  if (req.user?.email === email && req.user?.unsubscribed === false) {
+    return res.status(400).json({ message: "You have unsubscribed already." });
+  }
+
+  const subscriber = await EmailSubscriber.findOne({ email: email.trim() });
+
+  if (subscriber && subscriber.unsubscribed === true) {
+    await EmailSubscriber.updateOne(
+      { email: email.trim() },
+      { $set: { unsubscribed: false } },
+    );
+    return res.status(200).json({ message: "Subscribed successfully." });
+  }
+
+  if (subscriber && subscriber.unsubscribed === false) {
+    return res.status(400).json({ message: "You have already subscribed." });
+  }
+
+  try {
+    const subscriber = await EmailSubscriber.create({ email: email.trim() });
+    return res.status(200).json({ message: "Subscribed successfully." });
+  } catch (err) {
+    console.error("[subscribe] error:", err);
+    return res.status(500).json({ error: "Failed to subscribe." });
+  }
+};
