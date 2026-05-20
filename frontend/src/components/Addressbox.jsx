@@ -52,7 +52,7 @@ const handleSubmit = async (values) => {
     form.errors[field] ? "border-red-400" : "border-lux/10 focus:border-lux/30";
 
   return (
-    <div className="p-4 rounded-xl bg-lux-light/20 w-84 max-h-72">
+    <div className="p-4 rounded-xl bg-lux-light/20 w-84">
       <Modal opened={opened} onClose={close} title={`Update ${addType} address`} centered>
         <form onSubmit={form.onSubmit(handleSubmit)} className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-3">
