@@ -37,7 +37,7 @@ const Overview = () => {
     },
     {
       title: "Total Revenue",
-      value: `Rs. ${overview.revenue.allTime[0].total}`,
+      value: `$ ${overview.revenue.allTime[0].total}`,
       subvalue1: overview.revenue.thisMonth[0].total,
       subtitle1: "This Month",
     },

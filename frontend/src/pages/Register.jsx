@@ -13,6 +13,7 @@ const Register = () => {
   const [formmode, setFormMode] = useState("register");
   const isRegister = formmode === "register";
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
       {/* ── register form ── */}
 
@@ -73,32 +74,36 @@ const Register = () => {
     },
   });
 
-  const handleRegisterSubmit = async (values) => {
-    try {
-      await RegisterUser({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-      });
-      toast.success("Registered successfully!");
-      navigate("/");
-    } catch (error) {
-      console.log(error.message, "error in toast");
-      toast.error(error.response?.data?.message || "Something went wrong",{ position: "top-left" });
-    }
-  };
+const handleRegisterSubmit = async (values) => {
+  setLoading(true);
+  try {
+    await RegisterUser({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: values.password,
+    });
+    toast.success("Registered successfully!");
+    navigate("/");
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Something went wrong", { position: "top-left" });
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleLoginSubmit = async (values) => {
-    try {
-      await LoginUser(values);
-      toast.success("Logged in successfully!");
-      navigate("/");
-    } catch (error) {
-      console.log(err.message, "error in toast");
-     toast.error(error.response?.data?.message || "Something went wrong", { position: "top-left" });
-    }
-  };
+const handleLoginSubmit = async (values) => {
+  setLoading(true);
+  try {
+    await LoginUser(values);
+    toast.success("Logged in successfully!");
+    navigate("/");
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Something went wrong", { position: "top-left" });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const inputClass =
     "border bg-white px-3 py-2 text-sm outline-none focus:border-lux transition-colors rounded-md w-full";
@@ -189,7 +194,13 @@ const Register = () => {
                 )}
               </div>
 
-              <Animatedbtn str={"Sign In"} />
+            <button
+  type="submit"
+  disabled={loading}
+  className="w-full disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  <Animatedbtn str={loading ? "Signing in…" : "Sign In"} disabled={loading} />
+</button>
             </form>
           </div>
         </div>
@@ -308,9 +319,13 @@ const Register = () => {
                 )}
               </div>
 
-              <button type="submit" className="bg-ink text-white">
-                <Animatedbtn str={"Create Account"} />
-              </button>
+<button
+  type="submit"
+  disabled={loading}
+  className="bg-ink text-white disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  <Animatedbtn str={loading ? "Creating…" : "Create Account"} disabled={loading} />
+</button>
             </form>
           </div>
         </div>

@@ -117,6 +117,12 @@ const Cart = () => {
         return;
       }
       toast.error(e.response?.data?.message || "Failed to place order");
+
+      // !loggin out useing if tries to order and account is banned 
+      if(e.response.status==403 ){
+        setTimeout(() => navigate("/auth/register"), 3000);
+        return;
+      }
     } finally {
       setOrdering(false);
     }

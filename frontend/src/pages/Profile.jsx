@@ -15,6 +15,7 @@ import {
   Mail,
   CalendarDays,
 } from "lucide-react";
+import { ProfileSkeleton } from "@/components/ui/Skeletons";
 
 const Profile = () => {
   const { LogoutUser } = useAuth();
@@ -41,7 +42,7 @@ const Profile = () => {
     return "Good Evening";
   };
 
-  if (loading) return <h1>Loading...</h1>;
+  if (loading || orderLoadings || loadings) return <ProfileSkeleton />;
 
   const stats = [
     { icon: Package, label: "Orders", value: orderCount },

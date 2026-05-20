@@ -67,7 +67,14 @@ const DetailCatPage = () => {
   //  const { products, loading, error } = useProducts({filter});
   const isFirstLoad = useRef(true);
 
-  const { products, loading, totalPage, page, setPage } = useProducts({
+  const {
+    products,
+    loading,
+    totalPage,
+    page,
+    setPage,
+    count: prodcount,
+  } = useProducts({
     ...filter,
     ...filters,
   });
@@ -125,8 +132,37 @@ const DetailCatPage = () => {
 
       <div className="bg-white  relative">
         <CatUserFilter filters={filters} setFilters={setFilters} />
+
         {loading && <ProductCardSkeleton />}
-        {!loading && <Card products={products} key={category} />}
+
+        {/* no product found message  */}
+        {!loading && prodcount === 0 && (
+          <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
+            
+            <p className="text-xs uppercase tracking-widest text-hair">
+              No results
+            </p>
+            <h2 className="font-cormorant text-4xl text-hair-dark">
+              Nothing found here
+            </h2>
+            <p className="text-hair text-lg max-w-sm">
+              We couldn't find any products matching your filters. Try adjusting
+              your search or browse another category.
+            </p>
+            <button
+              onClick={() =>
+                setFilters({ q: "", sort: "createdAt", order: "desc" })
+              }
+              className="mt-2 px-6 py-2.5 border border-hair text-hair text-sm uppercase tracking-widest hover:border-hair-dark hover:text-hair-dark transition-colors"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+
+        {!loading && prodcount > 0 && (
+          <Card products={products} key={category} />
+        )}
       </div>
 
       <Paginationui

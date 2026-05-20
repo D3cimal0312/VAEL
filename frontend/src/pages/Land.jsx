@@ -9,7 +9,7 @@ import Reviews from "@/components/Reviews";
 import Subscribe from "@/components/Subscribe";
 import Animatebtn from "@/common/Animatebtn";
 import { Link } from "react-router";
-
+import { FeaturedProductSkeleton } from "@/components/ui/Skeletons";
 import { useProducts } from "@/hooks/products/useProducts";
 import Tags from "@/common/Tags";
 
@@ -105,7 +105,9 @@ const Land = () => {
         >
 
           <div className=" hidden md:grid lg:grid-cols-2 gap-2 md:h-[calc(100vh-100px-56px)] md:w-4/5  overflow-hidden">
-            {products.map((item, index) => (
+            
+            
+            { loading ? <FeaturedProductSkeleton /> : products.map((item, index) => (
               <div
                 className="bg-lux-light   overflow-hidden group "
                 key={index}

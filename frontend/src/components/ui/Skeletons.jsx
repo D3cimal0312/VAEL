@@ -265,3 +265,100 @@ export function CartSkeleton() {
     </div>
   );
 }
+
+
+export function FeaturedProductSkeleton({ limit = 4 }) {
+  return (
+    <>
+      {Array.from({ length: limit }).map((_, i) => (
+        <div key={i} className="bg-stone-200 overflow-hidden relative">
+          <div className="h-full w-full min-h-72 bg-stone-300 animate-pulse" />
+          <div className="absolute inset-x-0 bottom-6 flex justify-center gap-2">
+            <div className="h-5 w-14 rounded-full bg-stone-400 animate-pulse" />
+            <div className="h-5 w-10 rounded-full bg-stone-400 animate-pulse" />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
+
+
+export function ProfileSkeleton() {
+  return (
+    <div className="min-h-screen bg-cream-light px-6 md:px-12 py-10 flex flex-col gap-8">
+
+      {/* hero banner */}
+      <div className="relative rounded-2xl overflow-hidden h-48 md:h-56 bg-stone-300 animate-pulse">
+        <div className="absolute bottom-5 left-6 flex flex-col gap-2">
+          <div className="h-3 w-24 bg-stone-400 animate-pulse" />
+          <div className="h-8 w-48 bg-stone-400 animate-pulse" />
+        </div>
+      </div>
+
+      {/* stats row */}
+      <div className="flex justify-between gap-4">
+
+        {/* account card */}
+        <div className="bg-white rounded-2xl p-5 flex flex-col gap-3 min-w-44">
+          <div className="h-3 w-16 bg-stone-300 animate-pulse" />
+          <div className="h-4 w-36 bg-stone-300 animate-pulse" />
+          <div className="h-4 w-28 bg-stone-300 animate-pulse" />
+        </div>
+
+        {/* stat cards */}
+        {["Orders", "Favourites", "Spent"].map((l) => (
+          <div key={l} className="bg-white rounded-2xl p-5 flex flex-col gap-3 flex-1">
+            <div className="flex items-center justify-between">
+              <div className="h-3 w-16 bg-stone-300 animate-pulse" />
+              <div className="h-5 w-5 rounded-full bg-stone-300 animate-pulse" />
+            </div>
+            <div className="h-10 w-12 bg-stone-300 animate-pulse mx-auto" />
+          </div>
+        ))}
+
+        {/* addresses */}
+        <div className="flex flex-col gap-3">
+          <div className="h-3 w-24 bg-stone-300 animate-pulse" />
+          <div className="flex gap-5">
+            <div className="w-48 h-24 rounded-xl bg-stone-300 animate-pulse" />
+            <div className="w-48 h-24 rounded-xl bg-stone-300 animate-pulse" />
+          </div>
+        </div>
+
+      </div>
+
+      {/* favourites section */}
+      <div className="flex flex-col gap-3">
+        <div className="h-4 w-32 bg-stone-300 animate-pulse" />
+        <div className="flex gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="w-36 flex flex-col gap-2">
+              <div className="h-44 w-full bg-stone-300 animate-pulse rounded-lg" />
+              <div className="h-3 w-24 bg-stone-300 animate-pulse" />
+              <div className="h-3 w-16 bg-stone-300 animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* orders section */}
+      <div className="flex flex-col gap-3">
+        <div className="h-4 w-32 bg-stone-300 animate-pulse" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="bg-white rounded-xl p-4 flex justify-between items-center gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="h-3 w-24 bg-stone-300 animate-pulse" />
+              <div className="h-4 w-36 bg-stone-300 animate-pulse" />
+            </div>
+            <div className="h-3 w-16 bg-stone-300 animate-pulse" />
+            <div className="h-6 w-20 rounded-full bg-stone-300 animate-pulse" />
+            <div className="h-4 w-12 bg-stone-300 animate-pulse" />
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
