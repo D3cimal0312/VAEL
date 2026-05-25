@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Heading from "@/common/Heading";
 import { useNavigate } from "react-router";
 import Quantity from "@/common/Quantity.jsx";
-import useCart from "@/hooks/carts/useCarts";
+import { useCartContext } from "@/context/CartContext";
 import OrderSummary from "@/pages/OrderSummary";
 import { Trash2, ExternalLink } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -17,13 +17,14 @@ import { CartSkeleton } from "@/components/ui/Skeletons";
 const formatPrice = (price) => {
   return parseFloat((Math.round(price * 100) / 100).toFixed(2));
 };
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Cart = () => {
   const { user } = useAuth();
   const { getAddressSnapshot, hasHome, hasWork, selectedId } = useAddress();
   const [ordering, setOrdering] = useState(false);
   const { cart, loading, count, removeFromCart, updateQuantity, clearCart } =
-    useCart();
+    useCartContext();
   const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
   const [outOfStockItems, setOutOfStockItems] = useState([]);
@@ -128,7 +129,7 @@ const Cart = () => {
     }
   };
 
-  if (loading) return <CartSkeleton />;
+  if (loading || !cart) return <CartSkeleton />;
 
   return (
     <div className="font-fair flex flex-col md:flex-row min-h-screen">
@@ -143,10 +144,10 @@ const Cart = () => {
           </div>
           {cart && count > 0 && (
             <div
-              className="flex justify-center items-center text-red-400 cursor-pointer"
+              className="flex justify-center items-center text-red-400 cursor-pointer mb-12"
               onClick={() => clearCart()}
             >
-              <Trash2 size={18} />
+              <Trash2 size={20} />
               <button>Empty Cart</button>
             </div>
           )}

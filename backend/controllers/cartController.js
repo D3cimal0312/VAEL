@@ -49,6 +49,11 @@ export const addToCart = async (req, res) => {
         userId: req.user.id,
         items: [{ productId, color, size, quantity }],
       });
+      await cart.populate({
+        path: "items.productId",
+        select: "name images slug price stock",
+      });
+
       return res.status(200).json({ data: cart.items });
     }
 
@@ -78,6 +83,11 @@ export const addToCart = async (req, res) => {
     }
 
     await cart.save();
+
+        await cart.populate({
+      path: "items.productId",
+      select: "name images slug price stock",
+    });
 
     res.status(200).json({ data: cart.items });
   } catch (error) {
@@ -142,8 +152,15 @@ export const removeFromCart = async (req, res) => {
     );
 
     if (!cart) return res.status(404).json({ message: "Cart item not found" });
-
-    res.status(200).json({ message: "Item removed from cart" });
+    await cart.populate({
+      path: "items.productId",
+      select: "name images slug price stock",
+    });
+ 
+     res.status(200).json({ 
+      message: "Item removed from cart", 
+      data: cart.items 
+    });
   } catch (error) {
   console.error(error);
     res.status(500).json({ message: "Failed to remove item from cart" });
@@ -168,14 +185,13 @@ export const clearCart = async (req, res) => {
   }
 };
 
-// !todo handle merge cart logic properly 
-// //!done
+
 export const mergeCart = async (req, res) => {
   try {
-    console.log(1);
+
     const { items } = req.body;
     console.log("merge", items, req.user.id);
-    console.log(2);
+
 
     let cart = await Cart.findOne({ userId: req.user.id });
 
@@ -186,7 +202,7 @@ export const mergeCart = async (req, res) => {
 
     for (const item of items) {
       const { productId, quantity, color, size } = item;
-      console.log(3);
+
 
       const existingItem = cart.items.find(
         (i) =>
@@ -203,7 +219,16 @@ export const mergeCart = async (req, res) => {
     }
 
     await cart.save();
-
+    
+    await cart.populate({
+      path: "items.productId",
+      select: "name images slug price stock",
+    });
+ 
+    res.status(200).json({ 
+      message: "Cart merged successfully", 
+      data: cart.items 
+    });
     res.status(200).json({ message: "Cart merged successfully" });
   } catch (error) {
   console.error(error);

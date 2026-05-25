@@ -30,6 +30,8 @@ import Unsubscribe from "./pages/Unsubscribe";
 import AdminRoute from "./guards/AdminRoute";
 import ProtectedRoute from "./guards/ProtectedRoute";
 
+import { CartProvider } from "./context/CartContext";
+
 // !toast
 import { Toaster } from "react-hot-toast";
 function App() {
@@ -65,7 +67,11 @@ function App() {
       />
 
       <Routes>
-        <Route element={<UserLayout />}>
+        <Route element={
+          <CartProvider>
+          <UserLayout />
+          </CartProvider>
+          }>
           <Route path="/" element={<Land />} />
           <Route path="/category/:category" element={<DetailCatPage />} />
           <Route path="/products/:slug" element={<DetailedProduct />} />

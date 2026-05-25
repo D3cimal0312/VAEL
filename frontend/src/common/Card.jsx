@@ -2,7 +2,7 @@ import React from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Link } from "react-router";
 import Tags from "./Tags";
-import useCart from "@/hooks/carts/useCarts";
+import { useCartContext } from "@/context/CartContext";
 import { cartService } from "@/services/cartService";
 import useFavourite from "@/hooks/favourites/useFavourites";
 import toast from "react-hot-toast";
@@ -16,7 +16,7 @@ const Card = ({ products, limit = products.length, cols = 5 }) => {
   };
   const { toggleFavourite, isFavourite } = useFavourite();
 
-  const { quickAddToCart } = useCart();
+  const { quickAddToCart } = useCartContext();
   const handleQuickAdd = async (item) => {
     const defaultColor = item.colors[0];
     const defaultSize = item.sizes?.find((s) => !item.soldOut?.includes(s));

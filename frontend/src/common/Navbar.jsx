@@ -12,8 +12,12 @@ import Logo from "./Logo";
 import { useAuth } from "@/context/AuthContext";
 import Searchquery from "./Searchquery";
 
+
+import { useCartContext } from "@/context/CartContext";
+
 const Navbar = () => {
   const navoptions = ["NEW IN", "WOMEN", "MEN", "ACCESSORIES", "SALE", "ABOUT"];
+  const {count}=useCartContext();
   const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -62,10 +66,15 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink to="/cart">
-            <div className="">
+            <div className="relative">
               <button className="linked hover:text-lux transition-colors duration-200">
                 <ShoppingCart size={22} />
               </button>
+              {count>0 && (
+                <span className="absolute -top-4 -right-2 bg-lux text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  {count}
+                </span>
+              )}
             </div>
           </NavLink>
 

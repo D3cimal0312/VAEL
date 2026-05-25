@@ -16,14 +16,14 @@ import {
 
 import RateStars from "@/common/RateStars";
 
-import useCart from "@/hooks/carts/useCarts";
+import { useCartContext } from "@/context/CartContext";
 
 import useFavourite from "@/hooks/favourites/useFavourites";
 
 const DetailedProduct = () => {
   const { toggleFavourite, isFavourite } = useFavourite();
 
-  const { addToCart } = useCart();
+  const { addToCart } = useCartContext();
   const { slug } = useParams();
 
   const { product, loading } = useProduct(slug);
