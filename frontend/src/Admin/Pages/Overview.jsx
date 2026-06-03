@@ -10,13 +10,14 @@ import ProductHealth from '../components/Overview/ProductHealth.jsx'
 const Overview = () => {
   const { overview, loading } = usedashboard();
 
+  console.log(overview)
   if (loading) return <DashboardSkeleton />;
 
   const statCards = [
     {
       title: "Total Users",
       value: overview.users.total,
-      subvalue1: overview.users.newThisMonth,
+      subvalue1: overview.users?.newThisMonth,
       subtitle1: "Joined this month",
     },
     {
@@ -24,7 +25,7 @@ const Overview = () => {
       value: overview.products.total,
       subvalue1: overview.products.published,
       subtitle1: "Published",
-      subvalue2: overview.products.draft,
+      subvalue2: overview.products?.draft,
       subtitle2: "Draft",
     },
     {
@@ -38,13 +39,13 @@ const Overview = () => {
     {
       title: "Total Revenue",
       value: `$ ${overview.revenue.allTime[0].total}`,
-      subvalue1: overview.revenue.thisMonth[0].total,
+      subvalue1: overview.revenue.thisMonth[0]?.total,
       subtitle1: "This Month",
     },
     {
       title: "Total Categories",
       value: overview.categories.total,
-      subvalue1: overview.categories.active,
+      subvalue1: overview.categories?.active,
       subtitle1: "Active",
     },
   ];
@@ -59,7 +60,7 @@ const Overview = () => {
 
       <div className="grid grid-cols-5 gap-4 mt-4">
         <div className="bg-card rounded-2xl col-span-4 ">
-          <Weeksrevenue revenueData={overview.revenue.last7Days} />
+          <Weeksrevenue revenueData={overview.revenue?.last7Days} />
         </div>
         <div className="col-span-1">
           <Orderstatus ordersData={overview.orders} />
@@ -72,7 +73,7 @@ const Overview = () => {
         </div>
 
         <div className="flex-1 ">
-          <TopSellingCategories categories={overview.categories.topSelling} />
+          <TopSellingCategories categories={overview.categories?.topSelling} />
         </div>
       </div>
     </div>
