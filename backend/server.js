@@ -4,6 +4,9 @@ dotenv.config();
 
 import connectMainDB from "./config/maindb.js";
 
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
+
 import express from "express";
 // routes import
 import productsRoutes from "./routes/productsRoutes.js";
