@@ -75,6 +75,7 @@ const Register = () => {
   });
 
 const handleRegisterSubmit = async (values) => {
+  if (loading) return;
   setLoading(true);
   try {
     await RegisterUser({
@@ -93,6 +94,8 @@ const handleRegisterSubmit = async (values) => {
 };
 
 const handleLoginSubmit = async (values) => {
+  if (loading) return;
+
   setLoading(true);
   try {
     await LoginUser(values);

@@ -60,7 +60,7 @@ app.use("/dashboard",dashboardRoutes)
 app.use("/email",emailRoutes)
 
 // Connect to MongoDB then start server
-app.listen(process.env.PORT || 5000, () => {
+app.listen( 5000, () => {
   console.log(`SERVER RUNNING ON PORT ${process.env.PORT || 5000}`);
 });
 // todo:chekcin regading validators in schema for all models

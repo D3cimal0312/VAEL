@@ -44,7 +44,7 @@ const Land = () => {
       </div>
       <div className="pl-8 md:grid grid-cols-2 gap-y-12  overflow-hidden mb-16">
         <section
-          className=" mt-16 flex flex-col gap-y-8 w-full lg:w-4/5 md:pl-8"
+          className=" mt-16 flex flex-col gap-y-4 w-full lg:w-4/5 md:pl-8"
           data-aos="fade-up"
         >
           <div className="flex items-center gap-3 text-lux">

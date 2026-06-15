@@ -61,6 +61,10 @@ export const sendBulkEmail = async (req, res) => {
       delayMs: 1000,
     });
 
+    if (results.errors.length > 0) {
+  console.error("[sendBulkEmail] failures:", JSON.stringify(results.errors, null, 2));
+}
+
     return res.status(200).json({
       message: "Bulk email job complete",
       total: recipients.length,
