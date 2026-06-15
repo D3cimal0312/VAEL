@@ -1,4 +1,5 @@
-import transporter from "../config/mailer.js";
+import { sendEmail } from "../config/mailer.js";
+
 import User from "../models/Users.js";
 import EmailSubscriber from "../models/EmailSubscriber.js";
 import buildEmailHTML from "../utils/emailTemplates.js";
@@ -38,28 +39,27 @@ export const sendBulkEmail = async (req, res) => {
       return res.status(400).json({ message: "No recipients found" });
     }
 
-    const sendFn = async (recipient) => {
-      const token = generateUnsubscribeToken(recipient);
-      const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?token=${token}`;
+const sendFn = async (recipient) => {
+  const token = generateUnsubscribeToken(recipient);
+  const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?token=${token}`;
 
-      await transporter.sendMail({
-        from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.GMAIL_USER}>`,
-        to: recipient,
-        subject: subject.trim(),
-        html: buildEmailHTML({
-          subject: subject.trim(),
-          body: body.trim(),
-          unsubscribeUrl,
-        }),
-      });
-    };
+  await sendEmail({
+    to: recipient,
+    subject: subject.trim(),
+    html: buildEmailHTML({
+      subject: subject.trim(),
+      body: body.trim(),
+      unsubscribeUrl,
+    }),
+  });
+};
 
-    const results = await sendInBatches({
-      recipients,
-      sendFn,
-      batchSize: 10,
-      delayMs: 1000,
-    });
+const results = await sendInBatches({
+  recipients,
+  sendFn,
+  batchSize: 5,
+  delayMs: 1000,
+});
 
     if (results.errors.length > 0) {
   console.error("[sendBulkEmail] failures:", JSON.stringify(results.errors, null, 2));
