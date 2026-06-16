@@ -246,7 +246,7 @@ const ProductForm = () => {
       <div className="flex items-center justify-between mx-6">
         <Heading mainheading={"Products"} subheading={"Manage your products"} />
         <button
-          onClick={open}
+          onClick={() => { form.reset(); open(); }}
           className="bg-lux ml-4 mt-4 text-white px-4 py-2 rounded-md hover:bg-lux-dark transition-colors"
         >
           Add New Product

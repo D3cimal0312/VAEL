@@ -40,7 +40,7 @@ const CategoryForm = () => {
     },
   });
   console.log(category, "category");
- 
+
   useEffect(() => {
     if (category) {
       form.setValues({
@@ -50,8 +50,6 @@ const CategoryForm = () => {
       });
     }
   }, [category]);
-
-
 
   const handleSubmit = async (values) => {
     try {
@@ -77,7 +75,9 @@ const CategoryForm = () => {
       form.reset();
       refetch();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to create/update category");
+      toast.error(
+        err.response?.data?.message || "Failed to create/update category",
+      );
     }
   };
 
@@ -97,7 +97,10 @@ const CategoryForm = () => {
           subheading={"Manage your categories"}
         />
         <button
-          onClick={open}
+          onClick={() => {
+            form.reset();
+            open();
+          }}
           className="bg-lux ml-4 mt-4 text-white px-4 py-2 rounded-md hover:bg-lux-dark transition-colors"
         >
           Add New Category
