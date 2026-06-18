@@ -29,7 +29,7 @@ const CatUserFilter = ({filters,setFilters}) => {
 
 
               <div className="flex justify-between items-center mb-4 pb-3 border-b border-offwhite">
-        <div className="flex  justify-between w-full items-center">
+        <div className="flex flex-wrap gap-2   md:justify-between w-full items-center">
            <div className='flex flex-wrap gap-6 justify-between '>
             <div className='flex items-center  gap-6 mr-8'>
           <SlidersHorizontal size={15} strokeWidth={1.8} className="text-lux" />

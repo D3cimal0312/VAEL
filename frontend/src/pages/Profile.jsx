@@ -91,21 +91,22 @@ const Profile = () => {
         </div>
 
         {/* Stat cards */}
+        <div className="flex flex-col md:flex-row">
         {stats.map(({ icon: Icon, label, value }) => (
           <div
             key={label}
-            className="bg-card rounded-2xl p-5 flex flex-col gap-2"
+            className="bg-card rounded-2xl text-center p-5 flex items-center md:flex-col gap-2"
           >
-            <div className="flex items-center gap-8">
+            <div className="flex items-center  gap-2 md:gap-8">
               <p className="text-lg uppercase  text-gray-400">{label}</p>
               <Icon size={24} className="text-lux opacity-60" />
             </div>
-            <p className="font-fair text-4xl font-medium text-lux text-center leading-none">
+            <p className="font-fair text-4xl font-medium text-lux text-left md:text-center leading-none">
               {value}
             </p>
           </div>
         ))}
-
+</div>
         <div>
           <p className="text-lg uppercase  text-gray-400 mb-3">
             Saved addresses

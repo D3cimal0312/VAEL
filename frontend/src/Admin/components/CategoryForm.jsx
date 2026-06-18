@@ -51,7 +51,10 @@ const CategoryForm = () => {
     }
   }, [category]);
 
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmit = async (values) => {
+    if (submitting) return;
+    setSubmitting(true);
     try {
       // !making name lowercase so easier to deal with mongodb data
       const payload = {
@@ -78,6 +81,8 @@ const CategoryForm = () => {
       toast.error(
         err.response?.data?.message || "Failed to create/update category",
       );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -110,7 +115,9 @@ const CategoryForm = () => {
       <Modal
         size={"65%"}
         opened={modalOpen}
-        onClose={close}
+        onClose={() => {
+          if (!submitting) close();
+        }}
         centered
         title="Category Info"
       >
@@ -170,9 +177,16 @@ const CategoryForm = () => {
             <div className="mb-4">
               <button
                 type="submit"
-                className="px-6 py-3 bg-lux text-white font-medium rounded-md hover:bg-lux-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lux focus:ring-offset-cream transition-colors"
+                disabled={submitting}
+                className="px-6 py-3 bg-lux text-white font-medium rounded-md hover:bg-lux-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lux focus:ring-offset-cream transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {categoryId ? "Update Category" : "Save New Category"}
+                {submitting
+                  ? categoryId
+                    ? "Updating..."
+                    : "Saving..."
+                  : categoryId
+                    ? "Update Category"
+                    : "Save New Category"}
               </button>
 
               {/* Cancel edit — only shown when editing */}

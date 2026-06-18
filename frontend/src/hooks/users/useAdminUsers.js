@@ -1,35 +1,38 @@
-import { useState, useEffect, useCallback } from 'react';
-import { userService } from '@/services/userService';
-import toast from 'react-hot-toast';
+import { useState, useEffect, useCallback } from "react";
+import { userService } from "@/services/userService";
+import toast from "react-hot-toast";
 
 // get all admin users
-export function useAdminUsers(filter={}, refreshKey = 0) {
+export function useAdminUsers(filter = {}, refreshKey = 0) {
   const [users, setUsers] = useState([]);
-  const [count,setCount] = useState(0);
+  const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    async function fetch() {
+    setPage(1);
+  }, [filter]);
+
+  useEffect(() => {
+    async function fetchUsers() {
       setLoading(true);
       try {
-        const data = await userService.getAll(filter);
+        const data = await userService.getAll({ ...filter, page });
         setUsers(data.data);
         setCount(data.count);
         setTotalPage(data.totalPage);
-
       } catch (e) {
         toast.error(e.response?.data?.message || "Failed to fetch users");
       } finally {
         setLoading(false);
       }
     }
-    fetch();
-  }, [filter, refreshKey]);
+    fetchUsers();
+  }, [filter, page, refreshKey]);
 
-  return { users, loading,count,totalPage,page,setPage};
+  return { users, loading, count, totalPage, page, setPage };
 }
 
 // GET single — admin user detail page
@@ -65,7 +68,7 @@ export function useUserMutations() {
     try {
       return await userService.update(id, data);
     } catch (e) {
-         toast.error(e.response?.data?.message || "Failed to update user");
+      toast.error(e.response?.data?.message || "Failed to update user");
       return null;
     } finally {
       setLoading(false);

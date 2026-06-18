@@ -75,11 +75,11 @@ const Land = () => {
           </div>
           <div className="h-0.5 w-[115%] bg-lux" />
 
-          <div className="flex gap-12 items-center font-fair mt-4">
+          <div className="flex flex-wrap gap-12 items-center font-fair mt-4">
             {featuresdata.map((item, index) => (
               <div
                 key={index}
-                className="uppercase flex flex-col justify-between gap-2"
+                className="uppercase flex  flex-col justify-between gap-2"
                 data-aos="fade-up"
                 data-aos-delay={`${100 + (index + 1) * 100}`}
                 data-aos-offset="60"

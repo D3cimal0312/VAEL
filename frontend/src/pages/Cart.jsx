@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useAddress } from "@/context/AddressContext";
 import { orderService } from "@/services/orderService";
 import toast from "react-hot-toast";
-
+import { useRef } from "react";
 import CartDialog from "@/components/CartDialog";
 
 import { CartSkeleton } from "@/components/ui/Skeletons";
@@ -59,12 +59,15 @@ const Cart = () => {
     { label: "Total", value: totalPrice },
   ];
 
-  const updateQuantityui = async (id, value) => {
+  const debounceRef = useRef({});
+  const updateQuantityui = (id, value) => {
     setQuantities((prev) => ({ ...prev, [id]: value }));
-    await delay(2000);
-    updateQuantity(id, value);
-  };
 
+    clearTimeout(debounceRef.current[id]);
+    debounceRef.current[id] = setTimeout(() => {
+      updateQuantity(id, value);
+    }, 800);
+  };
   const handleOrder = async (skipOutOfStock = false) => {
     if (!cart || count === 0) {
       toast.error("Your cart is empty");
@@ -119,8 +122,8 @@ const Cart = () => {
       }
       toast.error(e.response?.data?.message || "Failed to place order");
 
-      // !loggin out useing if tries to order and account is banned 
-      if(e.response.status==403 ){
+      // !loggin out useing if tries to order and account is banned
+      if (e.response.status == 403) {
         setTimeout(() => navigate("/auth/register"), 3000);
         return;
       }

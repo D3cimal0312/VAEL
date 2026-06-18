@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@mantine/form";
 
-
 import { productService } from "@/services/productService";
 import { useAdminProducts } from "../context/index";
 import { useAdminProduct } from "@/hooks/products/useAdminProducts";
@@ -22,7 +21,7 @@ const ProductForm = () => {
   } = useAdminProducts();
   const { product } = useAdminProduct(productId);
 
-  console.log(categories)
+  console.log(categories);
 
   const form = useForm({
     initialValues: {
@@ -180,7 +179,12 @@ const ProductForm = () => {
         : [...current, size],
     );
   };
+
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (values) => {
+    if (submitting) return;
+    setSubmitting(true);
     try {
       const formData = new FormData();
 
@@ -230,6 +234,8 @@ const ProductForm = () => {
     } catch (err) {
       console.error("Product submission error:", err);
       toast.error(err.response?.data?.message || "Failed to submit product");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -246,7 +252,10 @@ const ProductForm = () => {
       <div className="flex items-center justify-between mx-6">
         <Heading mainheading={"Products"} subheading={"Manage your products"} />
         <button
-          onClick={() => { form.reset(); open(); }}
+          onClick={() => {
+            form.reset();
+            open();
+          }}
           className="bg-lux ml-4 mt-4 text-white px-4 py-2 rounded-md hover:bg-lux-dark transition-colors"
         >
           Add New Product
@@ -256,7 +265,9 @@ const ProductForm = () => {
       <Modal
         size={"65%"}
         opened={modalOpen}
-        onClose={close}
+        onClose={() => {
+          if (!submitting) close();
+        }}
         centered
         title="Product Info"
         styles={{ content: { backgroundColor: "#f5f0e8" } }}
@@ -682,9 +693,16 @@ const ProductForm = () => {
             <div className="pt-4 flex gap-4">
               <button
                 type="submit"
-                className="px-6 py-3 bg-lux text-white font-medium rounded-md hover:bg-lux/90 focus:outline-none focus:ring-2 focus:ring-lux focus:ring-offset-2 transition-colors"
+                disabled={submitting}
+                className="px-6 py-3 bg-lux text-white font-medium rounded-md hover:bg-lux/90 focus:outline-none focus:ring-2 focus:ring-lux focus:ring-offset-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {productId ? "Update Product" : "Save New Product"}
+                {submitting
+                  ? productId
+                    ? "Updating..."
+                    : "Saving..."
+                  : productId
+                    ? "Update Product"
+                    : "Save New Product"}
               </button>
 
               {productId && (
